@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<TargetFrameworks>
+			net462;
+			net47;
+			net471;
+			net472;
+			net48;
+			net481;
+			net6.0-windows7.0;
+			net7.0-windows7.0;
+			net8.0-windows7.0
+		</TargetFrameworks>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\eyedropper.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ColorPicker.Core\ColorPicker.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Themes\Generic.xaml">
+      <Generator></Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+  
+
+
+  <ItemGroup>
+    <Resource Include="Resources\eyedropper.png" />
+  </ItemGroup>
+
+</Project>
