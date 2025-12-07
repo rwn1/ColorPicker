@@ -437,6 +437,7 @@ namespace ColorPicker.View.Wpf
                 _horizontalHueCanvas.PreviewMouseLeftButtonDown -= HueCanvas_PreviewMouseLeftButtonDown;
                 _horizontalHueCanvas.PreviewMouseLeftButtonUp -= HueCanvas_PreviewMouseLeftButtonUp;
                 _horizontalHueCanvas.MouseMove -= HueCanvas_MouseMove;
+                _horizontalHueCanvas.SizeChanged -= HueCanvas_SizeChanged;
             }
 
             _horizontalHueCanvas = GetPart<Canvas>("PART_HorizontalHueCanvas");
@@ -450,6 +451,7 @@ namespace ColorPicker.View.Wpf
                 _horizontalHueCanvas.PreviewMouseLeftButtonDown += HueCanvas_PreviewMouseLeftButtonDown;
                 _horizontalHueCanvas.PreviewMouseLeftButtonUp += HueCanvas_PreviewMouseLeftButtonUp;
                 _horizontalHueCanvas.MouseMove += HueCanvas_MouseMove;
+                _horizontalHueCanvas.SizeChanged += HueCanvas_SizeChanged;
 
                 _hueMarkerHorizontal = new HueMarker();
 
@@ -477,6 +479,7 @@ namespace ColorPicker.View.Wpf
                 _verticalHueCanvas.PreviewMouseLeftButtonDown -= HueCanvas_PreviewMouseLeftButtonDown;
                 _verticalHueCanvas.PreviewMouseLeftButtonUp -= HueCanvas_PreviewMouseLeftButtonUp;
                 _verticalHueCanvas.MouseMove -= HueCanvas_MouseMove;
+                _verticalHueCanvas.SizeChanged -= HueCanvas_SizeChanged;
             }
 
             _verticalHueCanvas = GetPart<Canvas>("PART_VerticalHueCanvas");
@@ -490,6 +493,7 @@ namespace ColorPicker.View.Wpf
                 _verticalHueCanvas.PreviewMouseLeftButtonDown += HueCanvas_PreviewMouseLeftButtonDown;
                 _verticalHueCanvas.PreviewMouseLeftButtonUp += HueCanvas_PreviewMouseLeftButtonUp;
                 _verticalHueCanvas.MouseMove += HueCanvas_MouseMove;
+                _verticalHueCanvas.SizeChanged += HueCanvas_SizeChanged;
 
                 _hueMarkerVertical = new HueMarker();
 
@@ -510,10 +514,10 @@ namespace ColorPicker.View.Wpf
 
             if (_colorSelectionCanvas != null)
             {
-                _colorSelectionCanvas.SizeChanged -= ColorSelectionCanvas_SizeChanged;
-                _colorSelectionCanvas.PreviewMouseMove -= ColorSelectionCanvas_PreviewMouseMove;
                 _colorSelectionCanvas.PreviewMouseLeftButtonDown -= ColorSelectionCanvas_PreviewMouseLeftButtonDown;
                 _colorSelectionCanvas.PreviewMouseLeftButtonUp -= ColorSelectionCanvas_PreviewMouseLeftButtonUp;
+                _colorSelectionCanvas.PreviewMouseMove -= ColorSelectionCanvas_PreviewMouseMove;
+                _colorSelectionCanvas.SizeChanged -= ColorSelectionCanvas_SizeChanged;
             }
 
             _colorSelectionCanvas = GetPart<Canvas>("PART_ColorSelectionCanvas");
@@ -542,10 +546,10 @@ namespace ColorPicker.View.Wpf
                     RenderColorSelectionCanvas();
                 }
 
-                _colorSelectionCanvas.SizeChanged += ColorSelectionCanvas_SizeChanged;
-                _colorSelectionCanvas.PreviewMouseMove += ColorSelectionCanvas_PreviewMouseMove;
                 _colorSelectionCanvas.PreviewMouseLeftButtonDown += ColorSelectionCanvas_PreviewMouseLeftButtonDown;
                 _colorSelectionCanvas.PreviewMouseLeftButtonUp += ColorSelectionCanvas_PreviewMouseLeftButtonUp;
+                _colorSelectionCanvas.PreviewMouseMove += ColorSelectionCanvas_PreviewMouseMove;
+                _colorSelectionCanvas.SizeChanged += ColorSelectionCanvas_SizeChanged;
             }
 
             _selectedColorBackground = GetPart<Rectangle>("PART_SelectedColorBackground");
@@ -655,6 +659,11 @@ namespace ColorPicker.View.Wpf
             _colorSelectionHeight = 0;
 
             RenderColorSelectionCanvas();
+
+            double x = _viewModel.Hsv.Saturation * (_colorSelectionCanvas.ActualWidth - 1);
+            double y = (1 - _viewModel.Hsv.Value) * (_colorSelectionCanvas.ActualHeight - 1);
+
+            MoveColorSelectionMark(x, y);
         }
 
         /// <summary>
@@ -761,6 +770,17 @@ namespace ColorPicker.View.Wpf
         {
             if (Mouse.LeftButton == MouseButtonState.Pressed)
                 ChangeHueComponent(sender as Canvas, e.GetPosition(sender as Canvas));
+        }
+
+
+        /// <summary>
+        /// Hue selection size change event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HueCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            MoveHueMarker(_viewModel.Hsv.Hue);
         }
 
         /// <summary>
