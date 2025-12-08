@@ -245,6 +245,18 @@ xmlns:controls="clr-namespace:ColorPicker.View.Wpf;assembly=ColorPicker.View.Wpf
 </controls:ColorPicker>
 ```
 
+## 🔎 Project samples
+The solution includes three sample (`ColorPicker.App1`, `ColorPicker.App2` and `ColorPicker.App3`) applications demonstrating how to use the ColorPicker libraries.
+These samples show:
+
+* Integration of `ColorPicker.View.Wpf`
+
+* How to bind the *SelectedColor* of ColorPicker to your own *ViewModel*
+
+* Practical usage of color UI components
+
+You can explore the sample projects to see ready-to-use implementations and learn how to integrate the libraries into your own *WPF* applications.
+
 ## 🧪 Testing
 The ColorPicker solution is organized into separate projects for core logic and *WPF* user interface, each with its own set of tests.
 
