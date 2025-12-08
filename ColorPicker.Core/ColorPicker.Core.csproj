@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	<PackageId>rwn1.ColorPicker.Core</PackageId>
+	<PackageId>ColorPicker.Core</PackageId>
 	<Version>1.0.0</Version>
 	<Authors>rwn1</Authors>
 	<Description>Library with core logic</Description>

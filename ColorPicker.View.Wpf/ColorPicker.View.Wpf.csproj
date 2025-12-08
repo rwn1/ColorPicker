@@ -14,7 +14,7 @@
 		</TargetFrameworks>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
-		<PackageId>rwn1.ColorPicker.View.Wpf</PackageId>
+		<PackageId>ColorPicker.View.Wpf</PackageId>
 		<Version>1.0.0</Version>
 		<Authors>rwn1</Authors>
 		<Description>WPF UI visualization</Description>
