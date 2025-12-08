@@ -47,7 +47,7 @@
                                 <ColumnDefinition Width="70" />
                             </Grid.ColumnDefinitions>
 
-                            <Label x:Name="PART_HexLabel" />
+                            <Label Content="HEX" />
                             <TextBox x:Name="PART_HexTextBox" Grid.Column="1" />
                         </Grid>
 
@@ -65,17 +65,17 @@
                             </Grid.RowDefinitions>
 
                             <!--Red-->
-                            <Label x:Name="PART_RedLabel" />
+                            <Label Content="R" />
                             <TextBox x:Name="PART_RedTextBox" Grid.Column="1"/>
                             <Slider x:Name="PART_RedSlider" Grid.Column="2" />
 
                             <!--Green-->
-                            <Label x:Name="PART_GreenLabel" Grid.Row="1" />
+                            <Label Content="G" Grid.Row="1" />
                             <TextBox x:Name="PART_GreenTextBox" Grid.Column="1" Grid.Row="1" />
                             <Slider x:Name="PART_GreenSlider" Grid.Column="2" Grid.Row="1" />
 
                             <!--Blue-->
-                            <Label x:Name="PART_BlueLabel" Grid.Row="2" />
+                            <Label Content="B" Grid.Row="2" />
                             <TextBox x:Name="PART_BlueTextBox" Grid.Column="1" Grid.Row="2" />
                             <Slider x:Name="PART_BlueSlider"  Grid.Column="2" Grid.Row="2" />
 
@@ -90,7 +90,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!--Alpha-->
-                            <Label x:Name="PART_AlphaLabel" Grid.Row="3" />
+                            <Label Content="A" Grid.Row="3" />
                             <TextBox x:Name="PART_AlphaTextBox" Grid.Column="1" Grid.Row="3" />
                             <Slider x:Name="PART_AlphaSlider" Grid.Column="2" Grid.Row="3" />
                         </Grid>
@@ -109,17 +109,17 @@
                             </Grid.RowDefinitions>
 
                             <!--Hue-->
-                            <Label x:Name="PART_HueLabel" />
+                            <Label Content="H" />
                             <TextBox x:Name="PART_HueTextBox" Grid.Column="1" />
                             <Slider x:Name="PART_HueSlider" Grid.Column="2" />
 
                             <!--Saturation-->
-                            <Label x:Name="PART_SaturationLabel" Grid.Row="1" />
+                            <Label Content="S" Grid.Row="1" />
                             <TextBox x:Name="PART_SaturationTextBox" Grid.Column="1" Grid.Row="1" />
                             <Slider x:Name="PART_SaturationSlider" Grid.Column="2" Grid.Row="1" />
 
                             <!--Value-->
-                            <Label x:Name="PART_ValueLabel" Grid.Row="2" />
+                            <Label Content="V" Grid.Row="2" />
                             <TextBox x:Name="PART_ValueTextBox" Grid.Column="1" Grid.Row="2" />
                             <Slider x:Name="PART_ValueSlider"  Grid.Column="2" Grid.Row="2" />
 
@@ -139,17 +139,17 @@
                             </Grid.RowDefinitions>
 
                             <!--Hue-->
-                            <Label x:Name="PART_HslHueLabel" />
+                            <Label Content="H" />
                             <TextBox x:Name="PART_HslHueTextBox" Grid.Column="1" />
                             <Slider x:Name="PART_HslHueSlider" Grid.Column="2" />
 
                             <!--Saturation-->
-                            <Label x:Name="PART_HslSaturationLabel" Grid.Row="1" />
+                            <Label Content="S" Grid.Row="1" />
                             <TextBox x:Name="PART_HslSaturationTextBox" Grid.Column="1" Grid.Row="1" />
                             <Slider x:Name="PART_HslSaturationSlider" Grid.Column="2" Grid.Row="1" />
 
                             <!--Lightness-->
-                            <Label x:Name="PART_LightnessLabel" Grid.Row="2" />
+                            <Label Content="L" Grid.Row="2" />
                             <TextBox x:Name="PART_LightnessTextBox" Grid.Column="1" Grid.Row="2" />
                             <Slider x:Name="PART_LightnessSlider"  Grid.Column="2" Grid.Row="2" />
 
@@ -170,22 +170,22 @@
                             </Grid.RowDefinitions>
 
                             <!--Cyan-->
-                            <Label x:Name="PART_CyanLabel" />
+                            <Label Content="C" />
                             <TextBox x:Name="PART_CyanTextBox" Grid.Column="1" />
                             <Slider x:Name="PART_CyanSlider" Grid.Column="2" />
 
                             <!--Magenta-->
-                            <Label x:Name="PART_MagentaLabel" Grid.Row="1" />
+                            <Label Content="M" Grid.Row="1" />
                             <TextBox x:Name="PART_MagentaTextBox" Grid.Column="1" Grid.Row="1" />
                             <Slider x:Name="PART_MagentaSlider" Grid.Column="2" Grid.Row="1" />
 
                             <!--Yellow-->
-                            <Label x:Name="PART_YellowLabel" Grid.Row="2" />
+                            <Label Content="Y" Grid.Row="2" />
                             <TextBox x:Name="PART_YellowTextBox" Grid.Column="1" Grid.Row="2" />
                             <Slider x:Name="PART_YellowSlider"  Grid.Column="2" Grid.Row="2" />
 
                             <!--Key-->
-                            <Label x:Name="PART_KeyLabel" Grid.Row="3" />
+                            <Label Content="K" Grid.Row="3" />
                             <TextBox x:Name="PART_KeyTextBox" Grid.Column="1" Grid.Row="3" />
                             <Slider x:Name="PART_KeySlider"  Grid.Column="2" Grid.Row="3" />
 

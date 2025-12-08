@@ -83,41 +83,40 @@ namespace ColorPicker.View.Wpf
         /// Hex controls.
         /// </summary>
         private TextBox _hexTextBox;
-        private Label _hexLabel;
 
         /// <summary>
         /// RGB controls.
         /// </summary>
-        private Label _redLabel; private TextBox _redTextBox; private Slider _redSlider;
-        private Label _greenLabel; private TextBox _greenTextBox; private Slider _greenSlider;
-        private Label _blueLabel; private TextBox _blueTextBox; private Slider _blueSlider;
+        private TextBox _redTextBox; private Slider _redSlider;
+        private TextBox _greenTextBox; private Slider _greenSlider;
+        private TextBox _blueTextBox; private Slider _blueSlider;
 
         /// <summary>
         /// Alpha controls.
         /// </summary>
-        private Label _alphaLabel; private TextBox _alphaTextBox; private Slider _alphaSlider;
+        private TextBox _alphaTextBox; private Slider _alphaSlider;
 
         /// <summary>
         /// HSV controls.
         /// </summary>
-        private Label _hueLabel; private TextBox _hueTextBox; private Slider _hueSlider;
-        private Label _saturationLabel; private TextBox _saturationTextBox; private Slider _saturationSlider;
-        private Label _valueLabel; private TextBox _valueTextBox; private Slider _valueSlider;
+        private TextBox _hueTextBox; private Slider _hueSlider;
+        private TextBox _saturationTextBox; private Slider _saturationSlider;
+        private TextBox _valueTextBox; private Slider _valueSlider;
 
         /// <summary>
         /// HSL controls.
         /// </summary>
-        private Label _hslHueLabel; private TextBox _hslHueTextBox; private Slider _hslHueSlider;
-        private Label _hslSaturationLabel; private TextBox _hslSaturationTextBox; private Slider _hslSaturationSlider;
-        private Label _lightnessLabel; private TextBox _lightnessTextBox; private Slider _lightnessSlider;
+        private TextBox _hslHueTextBox; private Slider _hslHueSlider;
+        private TextBox _hslSaturationTextBox; private Slider _hslSaturationSlider;
+        private TextBox _lightnessTextBox; private Slider _lightnessSlider;
 
         /// <summary>
         /// CMYK controls.
         /// </summary>
-        private Label _cyanLabel; private TextBox _cyanTextBox; private Slider _cyanSlider;
-        private Label _magentaLabel; private TextBox _magentaTextBox; private Slider _magentaSlider;
-        private Label _yellowLabel; private TextBox _yellowTextBox; private Slider _yellowSlider;
-        private Label _keyLabel; private TextBox _keyTextBox; private Slider _keySlider;
+        private TextBox _cyanTextBox; private Slider _cyanSlider;
+        private TextBox _magentaTextBox; private Slider _magentaSlider;
+        private TextBox _yellowTextBox; private Slider _yellowSlider;
+        private TextBox _keyTextBox; private Slider _keySlider;
 
         /// <summary>
         /// Eye dropper button.
@@ -243,9 +242,6 @@ namespace ColorPicker.View.Wpf
 
             #region Hex
 
-            _hexLabel = GetPart<Label>("PART_HexLabel");
-            BindLabel(_hexLabel, "HEX", Resource.Red);
-
             _hexTextBox = GetPart<TextBox>("PART_HexTextBox");
             BindTextBox(_hexTextBox, _viewModel.Hex, nameof(ColorPickerViewModel.Hex.Hex), Resource.Hex);
 
@@ -254,9 +250,6 @@ namespace ColorPicker.View.Wpf
             #region RGB
             
             // Red
-            _redLabel = GetPart<Label>("PART_RedLabel");
-            BindLabel(_redLabel, "R", Resource.Red);
-
             _redTextBox = GetPart<TextBox>("PART_RedTextBox");
             BindTextBox(_redTextBox, _viewModel.Rgb, nameof(ColorPickerViewModel.Rgb.Red), Resource.Red);
 
@@ -264,9 +257,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_redSlider, _viewModel.Rgb, nameof(ColorPickerViewModel.Rgb.Red), 0, 255);
 
             // Green
-            _greenLabel = GetPart<Label>("PART_GreenLabel");
-            BindLabel(_greenLabel, "G", Resource.Green);
-
             _greenTextBox = GetPart<TextBox>("PART_GreenTextBox");
             BindTextBox(_greenTextBox, _viewModel.Rgb, nameof(ColorPickerViewModel.Rgb.Green), Resource.Green);
 
@@ -274,9 +264,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_greenSlider, _viewModel.Rgb, nameof(ColorPickerViewModel.Rgb.Green), 0, 255);
 
             // Blue
-            _blueLabel = GetPart<Label>("PART_BlueLabel");
-            BindLabel(_blueLabel, "B", Resource.Blue);
-
             _blueTextBox = GetPart<TextBox>("PART_BlueTextBox");
             BindTextBox(_blueTextBox, _viewModel.Rgb, nameof(ColorPickerViewModel.Rgb.Blue), Resource.Blue);
 
@@ -288,9 +275,6 @@ namespace ColorPicker.View.Wpf
             #region Alpha
 
             // Alpha
-            _alphaLabel = GetPart<Label>("PART_AlphaLabel");
-            BindLabel(_alphaLabel, "A", Resource.Alpha);
-
             _alphaTextBox = GetPart<TextBox>("PART_AlphaTextBox");
             BindTextBox(_alphaTextBox, _viewModel.Alpha, nameof(AlphaModel.Alpha), Resource.Alpha, new PercentConverter(), "{0}%");
 
@@ -302,9 +286,6 @@ namespace ColorPicker.View.Wpf
             #region HSV
 
             // Hue
-            _hueLabel = GetPart<Label>("PART_HueLabel");
-            BindLabel(_hueLabel, "H", Resource.Hue);
-
             _hueTextBox = GetPart<TextBox>("PART_HueTextBox");
             BindTextBox(_hueTextBox, _viewModel.Hsv, nameof(ColorPickerViewModel.Hsv.Hue), Resource.Hue, new DegreesConverter(), "{0}°");
 
@@ -312,9 +293,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_hueSlider, _viewModel.Hsv, nameof(ColorPickerViewModel.Hsv.Hue), 0, 360, new DegreesConverter());
 
             // Saturation
-            _saturationLabel = GetPart<Label>("PART_SaturationLabel");
-            BindLabel(_saturationLabel, "S", Resource.Saturation);
-
             _saturationTextBox = GetPart<TextBox>("PART_SaturationTextBox");
             BindTextBox(_saturationTextBox, _viewModel.Hsv, nameof(ColorPickerViewModel.Hsv.Saturation), Resource.Saturation, new PercentConverter(), "{0}%");
 
@@ -322,9 +300,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_saturationSlider, _viewModel.Hsv, nameof(ColorPickerViewModel.Hsv.Saturation), 0, 100, new PercentConverter());
 
             // Value
-            _valueLabel = GetPart<Label>("PART_ValueLabel");
-            BindLabel(_valueLabel, "V", Resource.Blue);
-
             _valueTextBox = GetPart<TextBox>("PART_ValueTextBox");
             BindTextBox(_valueTextBox, _viewModel.Hsv, nameof(ColorPickerViewModel.Hsv.Value), Resource.Value, new PercentConverter(), "{0}%");
 
@@ -336,9 +311,6 @@ namespace ColorPicker.View.Wpf
             #region HSL
             
             // Hue
-            _hslHueLabel = GetPart<Label>("PART_HslHueLabel");
-            BindLabel(_hslHueLabel, "H", Resource.HslHue);
-
             _hslHueTextBox = GetPart<TextBox>("PART_HslHueTextBox");
             BindTextBox(_hslHueTextBox, _viewModel.Hsl, nameof(ColorPickerViewModel.Hsl.Hue), Resource.HslHue, new DegreesConverter(), "{0}°");
 
@@ -346,9 +318,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_hslHueSlider, _viewModel.Hsl, nameof(ColorPickerViewModel.Hsl.Hue), 0, 360, new DegreesConverter());
 
             // Saturation
-            _hslSaturationLabel = GetPart<Label>("PART_HslSaturationLabel");
-            BindLabel(_hslSaturationLabel, "S", Resource.HslSaturation);
-
             _hslSaturationTextBox = GetPart<TextBox>("PART_HslSaturationTextBox");
             BindTextBox(_hslSaturationTextBox, _viewModel.Hsl, nameof(ColorPickerViewModel.Hsl.Saturation), Resource.HslSaturation, new PercentConverter(), "{0}%");
 
@@ -356,9 +325,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_hslSaturationSlider, _viewModel.Hsl, nameof(ColorPickerViewModel.Hsl.Saturation), 0, 100, new PercentConverter());
 
             // Lightness
-            _lightnessLabel = GetPart<Label>("PART_LightnessLabel");
-            BindLabel(_lightnessLabel, "L", Resource.Lightness);
-
             _lightnessTextBox = GetPart<TextBox>("PART_LightnessTextBox");
             BindTextBox(_lightnessTextBox, _viewModel.Hsl, nameof(ColorPickerViewModel.Hsl.Lightness), Resource.Lightness, new PercentConverter(), "{0}%");
 
@@ -370,9 +336,6 @@ namespace ColorPicker.View.Wpf
             #region CMYK
 
             // Cyan
-            _cyanLabel = GetPart<Label>("PART_CyanLabel");
-            BindLabel(_cyanLabel, "C", Resource.Cyan);
-
             _cyanTextBox = GetPart<TextBox>("PART_CyanTextBox");
             BindTextBox(_cyanTextBox, _viewModel.Cmyk, nameof(ColorPickerViewModel.Cmyk.Cyan), Resource.Cyan, new PercentConverter(), "{0}%");
 
@@ -380,9 +343,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_cyanSlider, _viewModel.Cmyk, nameof(ColorPickerViewModel.Cmyk.Cyan), 0, 100, new PercentConverter());
 
             // Magenta
-            _magentaLabel = GetPart<Label>("PART_MagentaLabel");
-            BindLabel(_magentaLabel, "M", Resource.Magenta);
-
             _magentaTextBox = GetPart<TextBox>("PART_MagentaTextBox");
             BindTextBox(_magentaTextBox, _viewModel.Cmyk, nameof(ColorPickerViewModel.Cmyk.Magenta), Resource.Magenta, new PercentConverter(), "{0}%");
 
@@ -390,9 +350,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_magentaSlider, _viewModel.Cmyk, nameof(ColorPickerViewModel.Cmyk.Magenta), 0, 100, new PercentConverter());
 
             // Yellow
-            _yellowLabel = GetPart<Label>("PART_YellowLabel");
-            BindLabel(_yellowLabel, "Y", Resource.Yellow);
-
             _yellowTextBox = GetPart<TextBox>("PART_YellowTextBox");
             BindTextBox(_yellowTextBox, _viewModel.Cmyk, nameof(ColorPickerViewModel.Cmyk.Yellow), Resource.Yellow, new PercentConverter(), "{0}%");
 
@@ -400,9 +357,6 @@ namespace ColorPicker.View.Wpf
             BindSlider(_yellowSlider, _viewModel.Cmyk, nameof(ColorPickerViewModel.Cmyk.Yellow), 0, 100, new PercentConverter());
 
             // Key
-            _keyLabel = GetPart<Label>("PART_KeyLabel");
-            BindLabel(_keyLabel, "K", Resource.Key);
-
             _keyTextBox = GetPart<TextBox>("PART_KeyTextBox");
             BindTextBox(_keyTextBox, _viewModel.Cmyk, nameof(ColorPickerViewModel.Cmyk.Key), Resource.Key, new PercentConverter(), "{0}%");
 
@@ -574,16 +528,6 @@ namespace ColorPicker.View.Wpf
         private T GetPart<T>(string name) where T : class
         {
             return GetTemplateChild(name) as T;
-        }
-
-        /// <summary>
-        /// Sets the label’s content and tooltip.
-        /// </summary>
-        private void BindLabel(Label label, string content, string tooltipResource)
-        {
-            if (label == null) return;
-            label.Content = content;
-            label.ToolTip = tooltipResource;
         }
 
         /// <summary>
