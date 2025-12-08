@@ -7,10 +7,10 @@ The control is designed for flexible and precise color selection, suitable for b
 The core library `ColorPicker.Core` and the *WPF* UI implementation `ColorPicker.View.Wpf` (including `ColorPicker.Core`) are available as NuGet packages:
 
 ```powershell
-dotnet add package rwn1.ColorPicker.Core
+dotnet add package ColorPicker.Core
 ```
 ```powershell
-dotnet add package rwn1.ColorPicker.View.Wpf
+dotnet add package ColorPicker.View.Wpf
 ```
 
 ## 🧬 WPF Control template parts (PART_*)
