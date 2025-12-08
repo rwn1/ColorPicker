@@ -90,7 +90,7 @@ This advanced layout is designed for applications that require detailed color ma
 
 Like all other template variations, each part can be freely styled, rearranged, replaced, or omitted using a custom ControlTemplate. Developers can choose which color models to expose and can combine or remove UI elements depending on the needs of their application.
 
-<img width="662" height="433" alt="image" src="https://github.com/user-attachments/assets/8fb4667b-c737-41c7-b0a5-f1aa86624103" />
+<img width="494" height="261" alt="image" src="https://github.com/user-attachments/assets/28c434d6-4b31-46dd-a4ea-17639828cd99" />
 
 ```xml
 xmlns:controls="clr-namespace:ColorPicker.View.Wpf;assembly=ColorPicker.View.Wpf"
