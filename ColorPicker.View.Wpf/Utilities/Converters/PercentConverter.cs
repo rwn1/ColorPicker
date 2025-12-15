@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
 
 namespace ColorPicker.View.Wpf.Utilities.Converters
@@ -11,7 +10,8 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
         {
             if (value is double d)
             {
-                return (int)Math.Round(d * 100.0);
+                int rounded = (int)Math.Round(d * 100.0);
+                return $"{rounded}%";
             }
 
             return value;
@@ -21,11 +21,6 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
         {
             if (value is string s)
             {
-                if (s.Contains("°") || s.Contains("%"))
-                {
-                    s = s.TrimEnd('°').TrimEnd('%');
-                }
-                
                 if (double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out double percent))
                 {
                     return percent / 100.0;

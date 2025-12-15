@@ -3,6 +3,7 @@ using ColorPicker.Core.Properties;
 using ColorPicker.Core.Utilities;
 using ColorPicker.View.Wpf.Controls;
 using ColorPicker.View.Wpf.Shared;
+using ColorPicker.View.Wpf.Utilities;
 using ColorPicker.View.Wpf.Utilities.Converters;
 using System;
 using System.Diagnostics;
@@ -538,7 +539,10 @@ namespace ColorPicker.View.Wpf
             if (textBox == null) return;
             textBox.ToolTip = tooltipResource;
             textBox.SetBinding(TextBox.TextProperty,
-                new Binding(path) { Source = dataContext, Mode = BindingMode.TwoWay, Converter = converter, StringFormat = stringFormat });
+                new Binding(path) { Source = dataContext, Mode = BindingMode.TwoWay, Converter = converter });
+
+            if (stringFormat != null)
+                FocusFormatBehavior.SetFormat(textBox, stringFormat);
         }
 
         /// <summary>
