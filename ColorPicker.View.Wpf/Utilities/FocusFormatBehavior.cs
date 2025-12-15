@@ -8,20 +8,20 @@ namespace ColorPicker.View.Wpf.Utilities
 {
     internal static class FocusFormatBehavior
     {
-        public static readonly DependencyProperty FormatProperty =
+        public static readonly DependencyProperty UnitProperty =
             DependencyProperty.RegisterAttached(
-                "Format",
+                "Unit",
                 typeof(string),
                 typeof(FocusFormatBehavior),
-                new PropertyMetadata(null, OnFormatChanged));
+                new PropertyMetadata(null, OnUnitChanged));
 
-        public static void SetFormat(DependencyObject element, string value)
-            => element.SetValue(FormatProperty, value);
+        public static void SetUnit(DependencyObject element, string value)
+            => element.SetValue(UnitProperty, value);
 
-        public static string GetFormat(DependencyObject element)
-            => (string)element.GetValue(FormatProperty);
+        public static string GetUnit(DependencyObject element)
+            => (string)element.GetValue(UnitProperty);
 
-        private static void OnFormatChanged(
+        private static void OnUnitChanged(
             DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
@@ -41,13 +41,11 @@ namespace ColorPicker.View.Wpf.Utilities
         private static void OnGotFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             var tb = (TextBox)sender;
-            var format = GetFormat(tb);
-            if (string.IsNullOrWhiteSpace(format)) return;
+            var unit = GetUnit(tb);
+            if (string.IsNullOrWhiteSpace(unit)) return;
 
-            var suffix = ExtractSuffix(format);
-
-            if (!string.IsNullOrEmpty(suffix) && tb.Text.EndsWith(suffix))
-                tb.Text = tb.Text.Substring(0, tb.Text.Length - suffix.Length).Trim();
+            if (!string.IsNullOrEmpty(unit) && tb.Text.EndsWith(unit))
+                tb.Text = tb.Text.Substring(0, tb.Text.Length - unit.Length).Trim();
 
             tb.CaretIndex = tb.Text.Length;
         }
@@ -55,27 +53,18 @@ namespace ColorPicker.View.Wpf.Utilities
         private static void OnLostFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             var tb = (TextBox)sender;
-            var format = GetFormat(tb);
+            var unit = GetUnit(tb);
 
-            if (string.IsNullOrWhiteSpace(format))
+            if (string.IsNullOrWhiteSpace(unit))
                 return;
 
             var be = BindingOperations.GetBindingExpression(tb, TextBox.TextProperty);
             be?.UpdateSource();
 
-            be?.UpdateTarget();
-
             if (int.TryParse(tb.Text, out var value))
             {
-                tb.Text = string.Format(CultureInfo.CurrentCulture, format, value);
+                tb.Text = string.Format(CultureInfo.CurrentCulture, "{0}" + unit, value);
             }
-        }
-
-        private static string ExtractSuffix(string format)
-        {
-            var idx = format.IndexOf("{0}");
-            if (idx < 0) return string.Empty;
-            return format.Substring(idx + 3);
         }
     }
 }

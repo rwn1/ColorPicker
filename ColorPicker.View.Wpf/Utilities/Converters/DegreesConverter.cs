@@ -11,7 +11,7 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
             if (value is double d)
             {
                 int rounded = (int)Math.Round(d);
-                return $"{rounded}°";
+                return $"{rounded}{parameter}";
             }
 
             return value;
