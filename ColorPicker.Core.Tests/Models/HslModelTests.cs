@@ -27,7 +27,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Hue_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 10;
+            float initial = 10;
             var model = new HslModel()
             {
                 Hue = initial
@@ -37,7 +37,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Hue = 10.000001;
+            model.Hue = 10.000001f;
 
             // Assert
             Assert.Equal(initial, model.Hue);
@@ -51,7 +51,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(359.9999, 359.9999)]
         [InlineData(360, 360)]
         [InlineData(500, 360)]
-        public void Hue_WhenSet_ClampsValue(double input, double expected)
+        public void Hue_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new HslModel();
@@ -68,8 +68,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.000001, false)]
         [InlineData(0, 0.001, true)]
         [InlineData(50, 51, true)]
-        public void Hue_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+        public void Hue_RaisesChangedOnlyWhenValueReallyChanges(float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new HslModel() 
@@ -100,7 +99,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Saturation = 0.5;
+            model.Saturation = 0.5f;
 
             // Assert
             Assert.Equal(nameof(HslModel.Saturation), changedProp);
@@ -110,7 +109,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Saturation_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new HslModel
             {
                 Saturation = initial
@@ -120,7 +119,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Saturation = 0.500000001;
+            model.Saturation = 0.500000001f;
 
             // Assert
             Assert.Equal(initial, model.Saturation);
@@ -135,7 +134,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Saturation_WhenSet_ClampsValue(double input, double expected)
+        public void Saturation_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new HslModel();
@@ -152,8 +151,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.00000001, false)]
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
-        public void Saturation_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+        public void Saturation_RaisesChangedOnlyWhenValueReallyChanges(float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new HslModel
@@ -184,7 +182,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Lightness = 0.5;
+            model.Lightness = 0.5f;
 
             // Assert
             Assert.Equal(nameof(HslModel.Lightness), changedProp);
@@ -194,7 +192,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Lightness_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new HslModel
             {
                 Lightness = initial
@@ -204,7 +202,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Lightness = 0.500000001;
+            model.Lightness = 0.500000001f;
 
             // Assert
             Assert.Equal(initial, model.Lightness);
@@ -219,7 +217,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Lightness_WhenSet_ClampsValue(double input, double expected)
+        public void Lightness_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new HslModel();
@@ -235,8 +233,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.00000001, false)]
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
-        public void Lightness_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+        public void Lightness_RaisesChangedOnlyWhenValueReallyChanges(float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new HslModel
@@ -264,8 +261,8 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0, 0, 50, 0, 0.5, 2)]
         [InlineData(0, 0, 0, 50, 0.5, 0.5, 3)]
         public void SetFromHub_ChangesOnlyChangedProperties(
-            double initialHue, double initialSaturation, double initialValue,
-            double setHue, double setSaturation, double setValue,
+            float initialHue, float initialSaturation, float initialValue,
+            float setHue, float setSaturation, float setValue,
             int expectedEventCount)
         {
             // Arrange

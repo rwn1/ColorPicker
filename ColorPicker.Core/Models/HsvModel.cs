@@ -8,16 +8,16 @@ namespace ColorPicker.Core.Models
     /// </summary>
     public class HsvModel : ModuleBase
     {
-        private double _hue = 0;
+        private float _hue = 0;
         /// <summary>
         /// Gets or sets the hue component of the HSV color (0-360 degrees).
         /// </summary>
-        public double Hue
+        public float Hue
         {
             get => _hue;
             set
             {
-                double clamped = value;
+                float clamped = value;
                 if (clamped < 0) clamped = 0;
                 if (clamped > 360) clamped = 360;
                 if (Math.Abs(clamped - _hue) < 0.00001) return;
@@ -26,32 +26,32 @@ namespace ColorPicker.Core.Models
             }
         }
 
-        private double _saturation = 0;
+        private float _saturation = 0;
         /// <summary>
         /// Gets or sets the saturation component of the HSV color (0-1).
         /// </summary>
-        public double Saturation
+        public float Saturation
         {
             get => _saturation;
             set
             {
-                double clamped = value < 0 ? 0 : (value > 1 ? 1 : value);
+                float clamped = value < 0 ? 0 : (value > 1 ? 1 : value);
                 if (Math.Abs(clamped - _saturation) < 0.0000001) return;
                 _saturation = clamped;
                 NotifyAndRaiseChanged();
             }
         }
 
-        private double _value = 1;
+        private float _value = 1;
         /// <summary>
         /// Gets or sets the value (brightness) component of the HSV color (0-1).
         /// </summary>
-        public double Value
+        public float Value
         {
             get => _value;
             set
             {
-                double clamped = value < 0 ? 0 : (value > 1 ? 1 : value);
+                float clamped = value < 0 ? 0 : (value > 1 ? 1 : value);
                 if (Math.Abs(clamped - _value) < 0.0000001) return;
                 _value = clamped;
                 NotifyAndRaiseChanged();
@@ -64,7 +64,7 @@ namespace ColorPicker.Core.Models
         /// <param name="h">Hue component.</param>
         /// <param name="s">Saturation component.</param>
         /// <param name="v">Value (brightness) component.</param>
-        internal void SetFromHub(double h, double s, double v)
+        internal void SetFromHub(float h, float s, float v)
         {
             SetSuppressChanged(true);
 
@@ -105,7 +105,7 @@ namespace ColorPicker.Core.Models
         /// <param name="b">Blue component.</param>
         internal void FromRgb(byte r, byte g, byte b)
         {
-            ColorConversions.RgbToHsv(r, g, b, out double hh, out double ss, out double vv);
+            ColorConversions.RgbToHsv(r, g, b, out float hh, out float ss, out float vv);
             SetFromHub(hh, ss, vv);
         }
     }

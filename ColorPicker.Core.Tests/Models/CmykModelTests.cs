@@ -17,7 +17,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Cyan = 0.5;
+            model.Cyan = 0.5f;
 
             // Assert
             Assert.Equal(nameof(CmykModel.Cyan), changedProp);
@@ -27,7 +27,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Cyan_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new CmykModel
             {
                 Cyan = initial
@@ -37,7 +37,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Cyan = 0.50000001;
+            model.Cyan = 0.50000001f;
 
             // Assert
             Assert.Equal(initial, model.Cyan);
@@ -52,7 +52,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Cyan_WhenSet_ClampsValue(double input, double expected)
+        public void Cyan_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new CmykModel();
@@ -70,7 +70,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
         public void Cyan_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+            float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new CmykModel
@@ -101,7 +101,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Magenta = 0.5;
+            model.Magenta = 0.5f;
 
             // Assert
             Assert.Equal(nameof(CmykModel.Magenta), changedProp);
@@ -111,7 +111,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Magenta_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new CmykModel
             {
                 Magenta = initial
@@ -121,7 +121,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Magenta = 0.50000001;
+            model.Magenta = 0.50000001f;
 
             // Assert
             Assert.Equal(initial, model.Magenta);
@@ -136,7 +136,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Magenta_WhenSet_ClampsValue(double input, double expected)
+        public void Magenta_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new CmykModel();
@@ -154,7 +154,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
         public void Magenta_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+            float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new CmykModel
@@ -185,7 +185,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Yellow = 0.5;
+            model.Yellow = 0.5f;
 
             // Assert
             Assert.Equal(nameof(CmykModel.Yellow), changedProp);
@@ -195,7 +195,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Yellow_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new CmykModel
             {
                 Yellow = initial
@@ -205,7 +205,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Yellow = 0.50000001;
+            model.Yellow = 0.50000001f;
 
             // Assert
             Assert.Equal(initial, model.Yellow);
@@ -220,7 +220,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Yellow_WhenSet_ClampsValue(double input, double expected)
+        public void Yellow_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new CmykModel();
@@ -238,7 +238,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
         public void Yellow_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+            float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new CmykModel
@@ -269,7 +269,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Key = 0.5;
+            model.Key = 0.5f;
 
             // Assert
             Assert.Equal(nameof(CmykModel.Key), changedProp);
@@ -279,7 +279,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Key_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new CmykModel
             {
                 Key = initial
@@ -289,7 +289,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Key = 0.50000001;
+            model.Key = 0.50000001f;
 
             // Assert
             Assert.Equal(initial, model.Key);
@@ -304,7 +304,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Key_WhenSet_ClampsValue(double input, double expected)
+        public void Key_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new CmykModel();
@@ -322,7 +322,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
         public void Key_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+            float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new CmykModel
@@ -359,7 +359,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => propertyChange = true;
 
             // Act
-            model.SetFromHub(0.1, 0.2, 0.3, 0.4);
+            model.SetFromHub(0.1f, 0.2f, 0.3f, 0.4f);
 
             // Asser
             Assert.True(propertyChange);
@@ -372,17 +372,17 @@ namespace ColorPicker.Core.Tests.Models
             // Arrange
             var model = new CmykModel
             {
-                Cyan = 0.1,
-                Magenta = 0.2,
-                Yellow = 0.3,
-                Key = 0.4
+                Cyan = 0.1f,
+                Magenta = 0.2f,
+                Yellow = 0.3f,
+                Key = 0.4f
             };
 
             var raised = new List<string>();
             model.PropertyChanged += (sender, args) => raised.Add(args.PropertyName!);
 
             // Act
-            model.SetFromHub(0.1, 0.25, 0.3, 0.9);
+            model.SetFromHub(0.1f, 0.25f, 0.3f, 0.9f);
 
             // Assert
             Assert.Equal(2, raised.Count);
@@ -396,7 +396,7 @@ namespace ColorPicker.Core.Tests.Models
             var model = new CmykModel();
 
             // Act
-            model.SetFromHub(0.3, 0.4, 0.5, 0.6);
+            model.SetFromHub(0.3f, 0.4f, 0.5f, 0.6f);
 
             // Assert
             Assert.Equal(0.3, model.Cyan, 7);
@@ -412,7 +412,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 255, 0, 1, 0, 1, 0)]
         [InlineData(0, 0, 255, 1, 1, 0, 0)]
         public void FromRgb_ComputesCorrectCmyk(byte r, byte g, byte b,
-            double ec, double em, double ey, double ek)
+            float ec, float em, float ey, float ek)
         {
             // Arrange
             var model = new CmykModel();
@@ -433,10 +433,10 @@ namespace ColorPicker.Core.Tests.Models
             // Arrange
             var model = new CmykModel
             {
-                Cyan = 0.5,
-                Magenta = 0.5,
-                Yellow = 0.5,
-                Key = 0.5
+                Cyan = 0.5f,
+                Magenta = 0.5f,
+                Yellow = 0.5f,
+                Key = 0.5f
             };
 
             var raised = new List<string>();
@@ -461,7 +461,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0, 0, 1, 0, 0, 0)]
         [InlineData(0, 0, 0, 0, 255, 255, 255)]
         public void ToRgb_ProducesCorrectValues(
-            double c, double m, double y, double k,
+            float c, float m, float y, float k,
             byte er, byte eg, byte eb)
         {
             // Arrange

@@ -94,7 +94,7 @@ public class ColorPickerViewModel : ObservableObject
     /// <param name="g">Green component.</param>
     /// <param name="b">Blue component.</param>
     /// <param name="alpha">Alpha component.</param>
-    public void SelectColor(byte r, byte g, byte b, double alpha = 1.0)
+    public void SelectColor(byte r, byte g, byte b, float alpha = 1.0f)
     {
         _hub.SetColor(r, g, b, alpha);
         NotifyPropertyChanged(nameof(Alpha));

@@ -28,7 +28,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Hue_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 10;
+            float initial = 10;
             var model = new HsvModel
             {
                 Hue = initial
@@ -38,7 +38,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Hue = 10.000001;
+            model.Hue = 10.000001f;
 
             // Assert
             Assert.Equal(initial, model.Hue);
@@ -52,7 +52,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(359.9999, 359.9999)]
         [InlineData(360, 360)]
         [InlineData(500, 360)]
-        public void Hue_WhenSet_ClampsValue(double input, double expected)
+        public void Hue_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new HsvModel();
@@ -69,8 +69,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.000001, false)]
         [InlineData(0, 0.001, true)]
         [InlineData(50, 51, true)]
-        public void Hue_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+        public void Hue_RaisesChangedOnlyWhenValueReallyChanges(float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new HsvModel
@@ -101,7 +100,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Saturation = 0.5;
+            model.Saturation = 0.5f;
 
             // Assert
             Assert.Equal(nameof(HsvModel.Saturation), changedProp);
@@ -111,7 +110,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Saturation_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new HsvModel
             {
                 Saturation = initial
@@ -121,7 +120,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Saturation = 0.500000001;
+            model.Saturation = 0.500000001f;
 
             // Assert
             Assert.Equal(initial, model.Saturation);
@@ -136,7 +135,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Saturation_WhenSet_ClampsValue(double input, double expected)
+        public void Saturation_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new HsvModel();
@@ -153,8 +152,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.00000001, false)]
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
-        public void Saturation_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+        public void Saturation_RaisesChangedOnlyWhenValueReallyChanges(float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new HsvModel
@@ -185,7 +183,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Value = 0.5;
+            model.Value = 0.5f;
 
             // Assert
             Assert.Equal(nameof(HsvModel.Value), changedProp);
@@ -195,7 +193,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Value_WhenValueDoesNotChange_DoesNotRaisePropertyChanged() 
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new HsvModel
             {
                 Value = initial
@@ -205,7 +203,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Value = 0.500000001;
+            model.Value = 0.500000001f;
 
             // Assert
             Assert.Equal(initial, model.Value);
@@ -220,7 +218,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Value_WhenSet_ClampsValue(double input, double expected)
+        public void Value_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new HsvModel();
@@ -236,8 +234,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.00000001, false)]
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
-        public void Value_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+        public void Value_RaisesChangedOnlyWhenValueReallyChanges(float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new HsvModel
@@ -265,8 +262,8 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0, 0, 50, 0, 0.5, 2)]
         [InlineData(0, 0, 0, 50, 0.5, 0.5, 3)]
         public void SetFromHub_ChangesOnlyChangedProperties(
-            double initialHue, double initialSaturation, double initialValue,
-            double setHue, double setSaturation, double setValue,
+            float initialHue, float initialSaturation, float initialValue,
+            float setHue, float setSaturation, float setValue,
             int expectedEventCount)
         {
             // Arrange
@@ -303,11 +300,11 @@ namespace ColorPicker.Core.Tests.Models
             var model = new HsvModel
             {
                 Hue = 120,
-                Saturation = 0.6,
-                Value = 0.6
+                Saturation = 0.6f,
+                Value = 0.6f
             };
 
-            ColorConversions.HsvToRgb(120, 0.6, 0.6, out byte r1, out byte g1, out byte b1);
+            ColorConversions.HsvToRgb(120, 0.6f, 0.6f, out byte r1, out byte g1, out byte b1);
 
             // Act
             model.ToRgb(out byte r2, out byte g2, out byte b2);
@@ -323,7 +320,7 @@ namespace ColorPicker.Core.Tests.Models
         {
             // Arrange
             byte r = 10, g = 200, b = 100;
-            ColorConversions.RgbToHsv(r, g, b, out double h, out double s, out double v);
+            ColorConversions.RgbToHsv(r, g, b, out float h, out float s, out float v);
 
             var model = new HsvModel();
 
@@ -343,8 +340,8 @@ namespace ColorPicker.Core.Tests.Models
             var model = new HsvModel()
             {
                 Hue = 123,
-                Saturation = 0.5,
-                Value = 0.75
+                Saturation = 0.5f,
+                Value = 0.75f
             };
 
             var raised = new List<string>();

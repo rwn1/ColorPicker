@@ -46,13 +46,13 @@ namespace ColorPicker.Core.Models
         /// Convert hex to rgba bytes (alpha in 0..1).
         /// Accepts #RRGGBB or #AARRGGBB
         /// </summary>
-        internal void ToRgba(out byte r, out byte g, out byte b, out double a)
+        internal void ToRgba(out byte r, out byte g, out byte b, out float a)
         {
             string h = _hex;
             if (h.Length == 7)
                 h = h.Insert(1, "FF");
 
-            a = int.Parse(h.Substring(1, 2), NumberStyles.HexNumber) / 255.0;
+            a = int.Parse(h.Substring(1, 2), NumberStyles.HexNumber) / 255.0f;
             r = byte.Parse(h.Substring(3, 2), NumberStyles.HexNumber);
             g = byte.Parse(h.Substring(5, 2), NumberStyles.HexNumber);
             b = byte.Parse(h.Substring(7, 2), NumberStyles.HexNumber);

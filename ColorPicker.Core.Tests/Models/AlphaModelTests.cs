@@ -17,7 +17,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (sender, args) => changedProp = args.PropertyName;
 
             // Act
-            model.Alpha = 0.5;
+            model.Alpha = 0.5f;
 
             // Assert
             Assert.Equal(nameof(AlphaModel.Alpha), changedProp);
@@ -27,7 +27,7 @@ namespace ColorPicker.Core.Tests.Models
         public void Alpha_WhenValueDoesNotChange_DoesNotRaisePropertyChanged()
         {
             // Arrange
-            double initial = 0.5;
+            float initial = 0.5f;
             var model = new AlphaModel
             {
                 Alpha = initial
@@ -37,7 +37,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => raised = true;
 
             // Act
-            model.Alpha = 0.500000001;
+            model.Alpha = 0.500000001f;
 
             // Assert
             Assert.Equal(initial, model.Alpha);
@@ -52,7 +52,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.999999, 0.999999)]
         [InlineData(1, 1)]
         [InlineData(100, 1)]
-        public void Alpha_WhenSet_ClampsValue(double input, double expected)
+        public void Alpha_WhenSet_ClampsValue(float input, float expected)
         {
             // Arrange
             var model = new AlphaModel();
@@ -70,7 +70,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0, 0.0001, true)]
         [InlineData(0.5, 0.51, true)]
         public void Alpha_RaisesChangedOnlyWhenValueReallyChanges(
-            double initial, double newValue, bool shouldRaise)
+            float initial, float newValue, bool shouldRaise)
         {
             // Arrange
             var model = new AlphaModel
@@ -94,7 +94,7 @@ namespace ColorPicker.Core.Tests.Models
             // Arrange
             var model = new AlphaModel()
             {
-                Alpha = 0.1
+                Alpha = 0.1f
             };
 
             bool changed = false;
@@ -104,7 +104,7 @@ namespace ColorPicker.Core.Tests.Models
             model.PropertyChanged += (_, __) => propertyChange = true;
 
             // Act
-            model.SetFromHub(0.5);
+            model.SetFromHub(0.5f);
 
             // Assert
             Assert.True(propertyChange);
@@ -117,7 +117,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData(0.1, 0.9, true)]
         [InlineData(1, 5, false)]
         [InlineData(0, 5, true)]
-        public void SetFromHub_RaisesPropertyChangedForChangedValue(double initial, double newValue, bool isChanged)
+        public void SetFromHub_RaisesPropertyChangedForChangedValue(float initial, float newValue, bool isChanged)
         {
             // Arrange
             var model = new AlphaModel
@@ -144,14 +144,14 @@ namespace ColorPicker.Core.Tests.Models
             // Arrange
             var model = new AlphaModel()
             {
-                Alpha = 0.1
+                Alpha = 0.1f
             };
 
             // Act
-            model.SetFromHub(0.6);
+            model.SetFromHub(0.6f);
 
             // Assert
-            Assert.Equal(0.6, model.Alpha);
+            Assert.Equal(0.6f, model.Alpha);
         }
     }
 }

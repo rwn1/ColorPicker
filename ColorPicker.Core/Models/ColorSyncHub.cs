@@ -143,7 +143,7 @@ public class ColorSyncHub: ObservableObject
         string h = hex;
         if (h.Length == 7) h = h.Insert(1, "FF");
 
-        double alpha = int.Parse(h.Substring(1, 2), NumberStyles.HexNumber) / 255.0;
+        float alpha = int.Parse(h.Substring(1, 2), NumberStyles.HexNumber) / 255.0f;
         byte r = byte.Parse(h.Substring(3, 2), NumberStyles.HexNumber);
         byte g = byte.Parse(h.Substring(5, 2), NumberStyles.HexNumber);
         byte b = byte.Parse(h.Substring(7, 2), NumberStyles.HexNumber);
@@ -180,7 +180,7 @@ public class ColorSyncHub: ObservableObject
     /// <param name="g">Green component.</param>
     /// <param name="b">Blue component.</param>
     /// <param name="alpha">Alpha component.</param>
-    public void SetColor(byte r, byte g, byte b, double alpha)
+    public void SetColor(byte r, byte g, byte b, float alpha)
     {
         if (IsSyncing) return;
         IsSyncing = true;
@@ -203,7 +203,7 @@ public class ColorSyncHub: ObservableObject
     /// <param name="b">Blue component.</param>
     /// <param name="alpha">Alpha component.</param>
     /// <returns>The color in hexadecimal format from RGB components.</returns>
-    private static string ToHexArgbString(byte r, byte g, byte b, double alpha)
+    private static string ToHexArgbString(byte r, byte g, byte b, float alpha)
     {
         byte a = (byte)Math.Round(Clamp01(alpha) * 255.0);
         return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", a, r, g, b);
@@ -214,7 +214,7 @@ public class ColorSyncHub: ObservableObject
     /// </summary>
     /// <param name="v">Value to clamp.</param>
     /// <returns>The clamp value to the 0–1 range.</returns>
-    private static double Clamp01(double v)
+    private static float Clamp01(float v)
     {
         if (v < 0) return 0;
         if (v > 1) return 1;

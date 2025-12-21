@@ -109,7 +109,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData("#FF0000", 255, 0, 0, 1.0)]
         [InlineData("#00FF00", 0, 255, 0, 1.0)]
         [InlineData("#0000FF", 0, 0, 255, 1.0)]
-        public void ToRgba_RgbFormat_AssumesAlphaFF(string hex, byte r, byte g, byte b, double a)
+        public void ToRgba_RgbFormat_AssumesAlphaFF(string hex, byte r, byte g, byte b, float a)
         {
             // Arrange
             var model = new HexModel
@@ -118,7 +118,7 @@ namespace ColorPicker.Core.Tests.Models
             };
 
             // Act
-            model.ToRgba(out byte rr, out byte gg, out byte bb, out double aa);
+            model.ToRgba(out byte rr, out byte gg, out byte bb, out float aa);
 
             // Assert
             Assert.Equal(r, rr);
@@ -131,7 +131,7 @@ namespace ColorPicker.Core.Tests.Models
         [InlineData("#80FF0000", 255, 0, 0, 0.502)]
         [InlineData("#7F00FF00", 0, 255, 0, 0.498)]
         [InlineData("#400000FF", 0, 0, 255, 0.251)]
-        public void ToRgba_WithAlpha_ParsesCorrectly(string hex, byte r, byte g, byte b, double expectedA)
+        public void ToRgba_WithAlpha_ParsesCorrectly(string hex, byte r, byte g, byte b, float expectedA)
         {
             // Arrange
             var model = new HexModel
@@ -140,7 +140,7 @@ namespace ColorPicker.Core.Tests.Models
             };
 
             // Act
-            model.ToRgba(out byte rr, out byte gg, out byte bb, out double a);
+            model.ToRgba(out byte rr, out byte gg, out byte bb, out float a);
 
             // Assert
             Assert.Equal(r, rr);

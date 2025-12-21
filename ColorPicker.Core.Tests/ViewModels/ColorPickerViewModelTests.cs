@@ -97,7 +97,7 @@
             // Arrange
             var vm = new ColorPickerViewModel();
 
-            vm.SelectColor(255, 0, 0, 0.5);
+            vm.SelectColor(255, 0, 0, 0.5f);
 
             // RGB is publicly verifiable
             Assert.Equal(255, vm.Rgb.Red);
@@ -118,7 +118,7 @@
             vm.PropertyChanged += (_, e) => raised.Add(e.PropertyName!);
 
             // Act
-            vm.SelectColor(100, 50, 25, 0.33);
+            vm.SelectColor(100, 50, 25, 0.33f);
 
             // Assert
             Assert.Contains(nameof(ColorPickerViewModel.Alpha), raised);
@@ -133,7 +133,7 @@
             var vm = new ColorPickerViewModel();
 
             // Act
-            vm.SelectColor(255, 0, 0, 1.0);
+            vm.SelectColor(255, 0, 0, 1.0f);
 
             // Assert
             Assert.Equal("#FFFF0000", vm.Hex.Hex);

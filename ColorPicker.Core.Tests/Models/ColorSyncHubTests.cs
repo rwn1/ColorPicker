@@ -76,7 +76,7 @@
             // Act
             hub.Hsl.Hue = 240; // blue
             hub.Hsl.Saturation = 1;
-            hub.Hsl.Lightness = 0.5;
+            hub.Hsl.Lightness = 0.5f;
 
             // Assert
             Assert.Equal(0, hub.Rgb.Red);
@@ -139,7 +139,7 @@
             hub.EnableCmyk = true;
 
             // Act
-            hub.SetColor(10, 20, 30, 0.75);
+            hub.SetColor(10, 20, 30, 0.75f);
 
             // Assert
             Assert.Equal(10, hub.Rgb.Red);
@@ -154,7 +154,7 @@
         [InlineData(-1, 0)]
         [InlineData(2, 1)]
         [InlineData(0.5, 0.5)]
-        public void Alpha_ClampsCorrectly(double input, double expected)
+        public void Alpha_ClampsCorrectly(float input, float expected)
         {
             // Arrange
             var hub = new ColorSyncHub();
