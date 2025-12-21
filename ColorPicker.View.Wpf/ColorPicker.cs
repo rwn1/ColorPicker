@@ -170,14 +170,14 @@ namespace ColorPicker.View.Wpf
         /// The last rendered data about the used hue.
         /// </summary>
         private WriteableBitmap _lastRenderedSelectedHueBitmap;
-        private double _lastRenderedSelectedHueValue = -1;
+        private float _lastRenderedSelectedHueValue = -1;
 
         /// <summary>
         /// The latest HSV values from which the result was rendered.
         /// </summary>
-        private double _lastHue = -1;
-        private double _lastSaturation = -1;
-        private double _lastValue = -1;
+        private float _lastHue = -1;
+        private float _lastSaturation = -1;
+        private float _lastValue = -1;
 
         /// <summary>
         /// Marker for color selection.
@@ -548,7 +548,7 @@ namespace ColorPicker.View.Wpf
         /// <summary>
         /// Binds a Slider to a property.
         /// </summary>
-        private void BindSlider(Slider slider, object dataContext, string path, double min, double max, IValueConverter converter = null)
+        private void BindSlider(Slider slider, object dataContext, string path, float min, float max, IValueConverter converter = null)
         {
             if (slider == null) return;
             slider.Minimum = min;
@@ -634,7 +634,7 @@ namespace ColorPicker.View.Wpf
             if (bytes == null || bytes.Length < 3) return;
 
             // Convert RGB to HSV
-            ColorConversions.RgbToHsv(bytes[2], bytes[1], bytes[0], out double h, out double s, out double v);
+            ColorConversions.RgbToHsv(bytes[2], bytes[1], bytes[0], out float h, out float s, out float v);
 
             // Only for prevention against rending due to changes in view model.
             _lastHue = h;
@@ -809,14 +809,14 @@ namespace ColorPicker.View.Wpf
             }
 
             int index = 0;
-            double hue = _viewModel.Hsv.Hue;
+            float hue = _viewModel.Hsv.Hue;
 
             for (int y = 0; y < height; y++)
             {
-                double v = 1.0 - (double)y / (height - 1);
+                float v = 1.0f - (float)y / (height - 1);
                 for (int x = 0; x < width; x++)
                 {
-                    double s = (double)x / (width - 1);
+                    float s = (float)x / (width - 1);
 
                     ColorConversions.HsvToRgb(hue, s, v, out byte r, out byte g, out byte b);
 

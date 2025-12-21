@@ -8,9 +8,9 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double d)
+            if (value is float val)
             {
-                int rounded = (int)Math.Round(d);
+                int rounded = (int)Math.Round(val);
                 return $"{rounded}{parameter}";
             }
 
@@ -21,7 +21,7 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
         {
             if (value is string s)
             {
-                if (double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsed))
+                if (float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out float parsed))
                 {
                     return parsed;
                 }
