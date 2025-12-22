@@ -57,6 +57,9 @@ public class AlphaSelectionView : Grid, IDisposable
         _alphaSelectionMark.SetAlpha(alpha);
     }
 
+    /// <summary>
+    /// Releases all resources used by this instance.
+    /// </summary>
     public void Dispose()
     {
         _squareBackground.Dispose();
