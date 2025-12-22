@@ -13,7 +13,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ColorPicker.View.Wpf
 {
@@ -125,25 +124,19 @@ namespace ColorPicker.View.Wpf
         private Button _eyedropperButton;
 
         /// <summary>
-        /// Canvases for hue selection.
+        /// Canvase for hue selection.
         /// </summary>
-        private Canvas _horizontalHueCanvas;
-        private Canvas _verticalHueCanvas;
+        private Canvas _hueSelectionView;
 
         /// <summary>
         /// Canvas for color selection.
         /// </summary>
-        private Canvas _colorSelectionCanvas;
-
-        /// <summary>
-        /// Background for selected color.
-        /// </summary>
-        private Rectangle _selectedColorBackground;
+        private Canvas _colorSelectionView;
 
         /// <summary>
         /// Selected color.
         /// </summary>
-        private Rectangle _selectedColor;
+        private Border _selectedColorView;
 
         /// <summary>
         /// Cached pixel buffer and writeable bitmap for saturation/value surface.
@@ -182,13 +175,12 @@ namespace ColorPicker.View.Wpf
         /// <summary>
         /// Marker for color selection.
         /// </summary>
-        private SelectionMark _selectionColorMarker;
+        private ColorSelectionMark _selectionColorMarker;
 
-        /// <summary>
-        /// Markers for hue selection.
-        /// </summary>
-        private HueMarker _hueMarkerVertical;
-        private HueMarker _hueMarkerHorizontal;
+        // <summary>
+        // Marker for hue selection.
+        // </summary>
+        private HueSelectionMarker _hueSelectionMarker;
 
         /// <summary>
         /// Initializes a new instance of the ColorPicker class.
@@ -204,7 +196,7 @@ namespace ColorPicker.View.Wpf
             {
                 if (e.PropertyName == nameof(HsvModel.Hue))
                 {
-                    if (_colorSelectionCanvas != null && _colorSelectionImage != null)
+                    if (_colorSelectionView != null && _colorSelectionImage != null)
                     {
                         // Prevention against changes from this class
                         if (_lastHue != _viewModel.Hsv.Hue)
@@ -224,8 +216,8 @@ namespace ColorPicker.View.Wpf
                         _lastSaturation = _viewModel.Hsv.Saturation;
                         _lastValue = _viewModel.Hsv.Value;
 
-                        double x = _viewModel.Hsv.Saturation * (_colorSelectionCanvas.ActualWidth - 1);
-                        double y = (1 - _viewModel.Hsv.Value) * (_colorSelectionCanvas.ActualHeight - 1);
+                        double x = _viewModel.Hsv.Saturation * (_colorSelectionView.ActualWidth - 1);
+                        double y = (1 - _viewModel.Hsv.Value) * (_colorSelectionView.ActualHeight - 1);
 
                         MoveColorSelectionMark(x, y);
                     }
@@ -386,78 +378,68 @@ namespace ColorPicker.View.Wpf
 
             #region Hue selection canvases
 
-            // Horizontal
-            if (_horizontalHueCanvas != null)
+            if (_hueSelectionView != null)
             {
-                _horizontalHueCanvas.PreviewMouseLeftButtonDown -= HueCanvas_PreviewMouseLeftButtonDown;
-                _horizontalHueCanvas.PreviewMouseLeftButtonUp -= HueCanvas_PreviewMouseLeftButtonUp;
-                _horizontalHueCanvas.MouseMove -= HueCanvas_MouseMove;
-                _horizontalHueCanvas.SizeChanged -= HueCanvas_SizeChanged;
+                _hueSelectionView.PreviewMouseLeftButtonDown -= HueCanvas_PreviewMouseLeftButtonDown;
+                _hueSelectionView.PreviewMouseLeftButtonUp -= HueCanvas_PreviewMouseLeftButtonUp;
+                _hueSelectionView.MouseMove -= HueCanvas_MouseMove;
+                _hueSelectionView.SizeChanged -= HueCanvas_SizeChanged;
             }
 
-            _horizontalHueCanvas = GetPart<Canvas>("PART_HorizontalHueCanvas");
+            _hueSelectionView = GetPart<Canvas>("PART_HueSelectionView");
 
-            if (_horizontalHueCanvas != null)            
+            if (_hueSelectionView != null)
             {
-                var brush = _internalResources["HorizontalHueBrush"] as LinearGradientBrush;
-                if (brush != null) _horizontalHueCanvas.Background = brush;
-                _horizontalHueCanvas.Children.Clear();
-                _horizontalHueCanvas.ClipToBounds = true;
-                _horizontalHueCanvas.PreviewMouseLeftButtonDown += HueCanvas_PreviewMouseLeftButtonDown;
-                _horizontalHueCanvas.PreviewMouseLeftButtonUp += HueCanvas_PreviewMouseLeftButtonUp;
-                _horizontalHueCanvas.MouseMove += HueCanvas_MouseMove;
-                _horizontalHueCanvas.SizeChanged += HueCanvas_SizeChanged;
+                _hueSelectionView.Children.Clear();
+                _hueSelectionView.ClipToBounds = true;
+                _hueSelectionView.PreviewMouseLeftButtonDown += HueCanvas_PreviewMouseLeftButtonDown;
+                _hueSelectionView.PreviewMouseLeftButtonUp += HueCanvas_PreviewMouseLeftButtonUp;
+                _hueSelectionView.MouseMove += HueCanvas_MouseMove;
+                _hueSelectionView.SizeChanged += HueCanvas_SizeChanged;
 
-                _hueMarkerHorizontal = new HueMarker();
+                _hueSelectionMarker = new HueSelectionMarker();
 
-                _hueMarkerHorizontal.RenderTransformOrigin = new Point(0.5 * 0.65d, 0.5);
+                _hueSelectionView.Children.Add(_hueSelectionMarker);
 
-                var transformGroup = new TransformGroup();
-                transformGroup.Children.Add(new RotateTransform { Angle = 90 });
-
-                _hueMarkerHorizontal.RenderTransform = transformGroup;
-
-                _horizontalHueCanvas.Children.Add(_hueMarkerHorizontal);
-
-                _hueMarkerHorizontal.Loaded += (sender, e) =>
+                _hueSelectionMarker.Loaded += (sender, e) =>
                 {
-                    _hueMarkerHorizontal.Width = _horizontalHueCanvas.ActualHeight;
-                    _hueMarkerHorizontal.Height = _horizontalHueCanvas.ActualHeight * 0.65d;
+                    LinearGradientBrush brush;
 
-                    MoveHueMarker(_viewModel.Hsv.Hue);
-                };
-            }
+                    if (_hueSelectionView.ActualWidth > _hueSelectionView.ActualHeight)
+                    {
+                        brush = _internalResources["HorizontalHueBrush"] as LinearGradientBrush;
+                    }
+                    else
+                    {
+                        brush = _internalResources["VerticalHueBrush"] as LinearGradientBrush;
+                    }
 
-            // Vertical
-            if (_verticalHueCanvas != null)
-            {
-                _verticalHueCanvas.PreviewMouseLeftButtonDown -= HueCanvas_PreviewMouseLeftButtonDown;
-                _verticalHueCanvas.PreviewMouseLeftButtonUp -= HueCanvas_PreviewMouseLeftButtonUp;
-                _verticalHueCanvas.MouseMove -= HueCanvas_MouseMove;
-                _verticalHueCanvas.SizeChanged -= HueCanvas_SizeChanged;
-            }
+                    if (brush != null)
+                    {
+                        brush.Freeze();
+                        _hueSelectionView.Background = brush;
+                    }
 
-            _verticalHueCanvas = GetPart<Canvas>("PART_VerticalHueCanvas");
+                    if (_hueSelectionView.ActualWidth > _hueSelectionView.ActualHeight)
+                    {
+                        _hueSelectionMarker.RenderTransformOrigin = new Point(0.5 * 0.65d, 0.5);
 
-            if (_verticalHueCanvas != null)
-            {
-                var brush = _internalResources["VerticalHueBrush"] as LinearGradientBrush;
-                if (brush != null) _verticalHueCanvas.Background = brush;
-                _verticalHueCanvas.Children.Clear();
-                _verticalHueCanvas.ClipToBounds = true;
-                _verticalHueCanvas.PreviewMouseLeftButtonDown += HueCanvas_PreviewMouseLeftButtonDown;
-                _verticalHueCanvas.PreviewMouseLeftButtonUp += HueCanvas_PreviewMouseLeftButtonUp;
-                _verticalHueCanvas.MouseMove += HueCanvas_MouseMove;
-                _verticalHueCanvas.SizeChanged += HueCanvas_SizeChanged;
+                        var transformGroup = new TransformGroup();
+                        transformGroup.Children.Add(new RotateTransform { Angle = 90 });
 
-                _hueMarkerVertical = new HueMarker();
+                        _hueSelectionMarker.RenderTransform = transformGroup;
+                    }
 
-                _verticalHueCanvas.Children.Add(_hueMarkerVertical);
-
-                _hueMarkerVertical.Loaded += (sender, e) =>
-                {
-                    _hueMarkerVertical.Width = _verticalHueCanvas.ActualWidth;
-                    _hueMarkerVertical.Height = _verticalHueCanvas.ActualWidth * 0.65d;
+                    if (_hueSelectionView.ActualWidth > _hueSelectionView.ActualHeight)
+                    {
+                        _hueSelectionMarker.Width = _hueSelectionView.ActualHeight;
+                        _hueSelectionMarker.Height = _hueSelectionView.ActualHeight * 0.65d;
+                    }
+                    else
+                    {
+                        _hueSelectionMarker.Width = _hueSelectionView.ActualWidth;
+                        _hueSelectionMarker.Height = _hueSelectionView.ActualWidth * 0.65d;
+                    }
 
                     MoveHueMarker(_viewModel.Hsv.Hue);
                 };
@@ -467,61 +449,61 @@ namespace ColorPicker.View.Wpf
 
             #region Color selection canvas
 
-            if (_colorSelectionCanvas != null)
+            if (_colorSelectionView != null)
             {
-                _colorSelectionCanvas.PreviewMouseLeftButtonDown -= ColorSelectionCanvas_PreviewMouseLeftButtonDown;
-                _colorSelectionCanvas.PreviewMouseLeftButtonUp -= ColorSelectionCanvas_PreviewMouseLeftButtonUp;
-                _colorSelectionCanvas.PreviewMouseMove -= ColorSelectionCanvas_PreviewMouseMove;
-                _colorSelectionCanvas.SizeChanged -= ColorSelectionCanvas_SizeChanged;
+                _colorSelectionView.PreviewMouseLeftButtonDown -= ColorSelectionCanvas_PreviewMouseLeftButtonDown;
+                _colorSelectionView.PreviewMouseLeftButtonUp -= ColorSelectionCanvas_PreviewMouseLeftButtonUp;
+                _colorSelectionView.PreviewMouseMove -= ColorSelectionCanvas_PreviewMouseMove;
+                _colorSelectionView.SizeChanged -= ColorSelectionCanvas_SizeChanged;
             }
 
-            _colorSelectionCanvas = GetPart<Canvas>("PART_ColorSelectionCanvas");
-            if (_colorSelectionCanvas != null)
+            _colorSelectionView = GetPart<Canvas>("PART_ColorSelectionView");
+            if (_colorSelectionView != null)
             {
-                _colorSelectionCanvas.Children.Clear();
-                _colorSelectionCanvas.ClipToBounds = true;
+                _colorSelectionView.Children.Clear();
+                _colorSelectionView.ClipToBounds = true;
 
                 _colorSelectionImage = new ImageBrush();
-                _colorSelectionCanvas.Background = _colorSelectionImage;
+                _colorSelectionView.Background = _colorSelectionImage;
 
-                _selectionColorMarker = new SelectionMark();
+                _selectionColorMarker = new ColorSelectionMark();
 
                 _selectionColorMarker.Loaded += (sender, e) =>
                 {
-                    double x = _viewModel.Hsv.Saturation * (_colorSelectionCanvas.ActualWidth - 1);
-                    double y = (1 - _viewModel.Hsv.Value) * (_colorSelectionCanvas.ActualHeight - 1);
+                    double x = _viewModel.Hsv.Saturation * (_colorSelectionView.ActualWidth - 1);
+                    double y = (1 - _viewModel.Hsv.Value) * (_colorSelectionView.ActualHeight - 1);
 
                     MoveColorSelectionMark(x, y);
                 };
 
-                _colorSelectionCanvas.Children.Add(_selectionColorMarker);
+                _colorSelectionView.Children.Add(_selectionColorMarker);
 
-                if (_colorSelectionCanvas.ActualWidth > 0 && _colorSelectionCanvas.ActualHeight > 0)
+                if (_colorSelectionView.ActualWidth > 0 && _colorSelectionView.ActualHeight > 0)
                 {
                     RenderColorSelectionCanvas();
                 }
 
-                _colorSelectionCanvas.PreviewMouseLeftButtonDown += ColorSelectionCanvas_PreviewMouseLeftButtonDown;
-                _colorSelectionCanvas.PreviewMouseLeftButtonUp += ColorSelectionCanvas_PreviewMouseLeftButtonUp;
-                _colorSelectionCanvas.PreviewMouseMove += ColorSelectionCanvas_PreviewMouseMove;
-                _colorSelectionCanvas.SizeChanged += ColorSelectionCanvas_SizeChanged;
+                _colorSelectionView.PreviewMouseLeftButtonDown += ColorSelectionCanvas_PreviewMouseLeftButtonDown;
+                _colorSelectionView.PreviewMouseLeftButtonUp += ColorSelectionCanvas_PreviewMouseLeftButtonUp;
+                _colorSelectionView.PreviewMouseMove += ColorSelectionCanvas_PreviewMouseMove;
+                _colorSelectionView.SizeChanged += ColorSelectionCanvas_SizeChanged;
             }
 
-            _selectedColorBackground = GetPart<Rectangle>("PART_SelectedColorBackground");
-            if (_selectedColorBackground != null)
+            _selectedColorView = GetPart<Border>("PART_SelectedColorView");
+            if (_selectedColorView != null)
             {
-                _selectedColorBackground.Fill = (DrawingBrush)_internalResources["SquareBrush"];
-            }
+                _selectedColorView.Background = (DrawingBrush)_internalResources["SquareBrush"];
 
-            _selectedColor = GetPart<Rectangle>("PART_SelectedColor");
-            if (_selectedColor != null)
-            {
-                _selectedColor.SetBinding(Rectangle.FillProperty,
+                var foreground = new Border();
+                foreground.SetBinding(Border.BackgroundProperty,
                     new Binding(nameof(ColorPickerViewModel.Hex.Hex)) { Source = _viewModel.Hex });
+
+                _selectedColorView.Child = foreground;
             }
             
             #endregion
         }
+
 
         /// <summary>
         /// Retrieves a template child by name and casts it to the specified type.
@@ -608,8 +590,8 @@ namespace ColorPicker.View.Wpf
 
             RenderColorSelectionCanvas();
 
-            double x = _viewModel.Hsv.Saturation * (_colorSelectionCanvas.ActualWidth - 1);
-            double y = (1 - _viewModel.Hsv.Value) * (_colorSelectionCanvas.ActualHeight - 1);
+            double x = _viewModel.Hsv.Saturation * (_colorSelectionView.ActualWidth - 1);
+            double y = (1 - _viewModel.Hsv.Value) * (_colorSelectionView.ActualHeight - 1);
 
             MoveColorSelectionMark(x, y);
         }
@@ -624,8 +606,8 @@ namespace ColorPicker.View.Wpf
 
             Point pos = point;
 
-            double x = Math.Min(Math.Max(0, point.X), _colorSelectionCanvas.ActualWidth);
-            double y = Math.Min(Math.Max(0, point.Y), _colorSelectionCanvas.ActualHeight);
+            double x = Math.Min(Math.Max(0, point.X), _colorSelectionView.ActualWidth);
+            double y = Math.Min(Math.Max(0, point.Y), _colorSelectionView.ActualHeight);
 
             MoveColorSelectionMark(x, y);
 
@@ -737,17 +719,20 @@ namespace ColorPicker.View.Wpf
         /// <param name="hue">Hue</param>
         private void MoveHueMarker(double hue)
         {
-            if (_hueMarkerVertical != null && _hueMarkerVertical.IsLoaded)
+            if (_hueSelectionMarker != null && _hueSelectionMarker.IsLoaded)
             {
-                double y = _verticalHueCanvas.ActualHeight * hue / 360d;
+                if (_hueSelectionView.ActualWidth > _hueSelectionView.ActualHeight)
+                {
+                    double x = _hueSelectionView.ActualWidth * hue / 360d;
 
-                Canvas.SetTop(_hueMarkerVertical, y - _hueMarkerVertical.Height / 2 + 1);
-            }
-            if (_hueMarkerHorizontal != null && _hueMarkerHorizontal.IsLoaded)
-            {
-                double x = _horizontalHueCanvas.ActualWidth * hue / 360d;
+                    Canvas.SetLeft(_hueSelectionMarker, x - _hueSelectionMarker.Width * 0.65d / 2);
+                }
+                else
+                {
+                    double y = _hueSelectionView.ActualHeight * hue / 360d;
 
-                Canvas.SetLeft(_hueMarkerHorizontal, x - _hueMarkerHorizontal.Width * 0.65d / 2);
+                    Canvas.SetTop(_hueSelectionMarker, y - _hueSelectionMarker.Height / 2 + 1);
+                }
             }
         }
 
@@ -761,7 +746,7 @@ namespace ColorPicker.View.Wpf
 
             int hue;
 
-            if (canvas == _verticalHueCanvas)
+            if (_hueSelectionView.ActualHeight > _hueSelectionView.ActualWidth)
             {
                 hue = (int)((point.Y / canvas.ActualHeight) * 360d);
             }
@@ -788,10 +773,10 @@ namespace ColorPicker.View.Wpf
         /// </summary>
         private void RenderColorSelectionCanvas()
         {
-            if (_colorSelectionCanvas == null || _colorSelectionImage == null) return;
+            if (_colorSelectionView == null || _colorSelectionImage == null) return;
 
-            int width = (int)_colorSelectionCanvas.ActualWidth;
-            int height = (int)_colorSelectionCanvas.ActualHeight;
+            int width = (int)_colorSelectionView.ActualWidth;
+            int height = (int)_colorSelectionView.ActualHeight;
 
             if (width <= 0 || height <= 0) return;
 

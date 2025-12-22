@@ -3,11 +3,11 @@
 namespace ColorPicker.View.Wpf.Controls
 {
     /// <summary>
-    /// Interaction logic for SelectionMark.xaml
+    /// Interaction logic for ColorSelectionMark.xaml
     /// </summary>
-    internal partial class SelectionMark : Grid
+    internal partial class ColorSelectionMark : Grid
     {
-        public SelectionMark()
+        public ColorSelectionMark()
         {
             InitializeComponent();
         }

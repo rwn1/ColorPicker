@@ -34,11 +34,11 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!--Brush for select-->
-                        <Canvas x:Name="PART_ColorSelectionCanvas" Grid.RowSpan="7" />
+                        <!--Color selection-->
+                        <Canvas x:Name="PART_ColorSelectionView" Grid.RowSpan="7" />
 
-                        <!--Hue with main brushes-->
-                        <Canvas x:Name="PART_VerticalHueCanvas" Grid.Column="1" Grid.RowSpan="7" Margin="3,0"/>
+                        <!--Hue selection-->
+                        <Canvas x:Name="PART_HueSelectionView" Grid.Column="1" Grid.RowSpan="7" Margin="3,0"/>
 
                         <!--HEX-->
                         <Grid Grid.Column="2" Margin="5">
@@ -191,14 +191,8 @@
 
                         </Grid>
 
-                        <!--Hue with main brushes--><!--
-                        <Canvas x:Name="PART_HorizontalHueCanvas" Grid.Row="7" Margin="0,3" />-->
-                        
-                        <!--Selected brush background-->
-                        <Rectangle x:Name="PART_SelectedColorBackground" Margin="0,3" Grid.Row="7"/>
-
-                        <!--Selected brush-->
-                        <Rectangle x:Name="PART_SelectedColor" Margin="0,3" Grid.Row="7"/>
+                        <!--Selected color-->
+                        <Border x:Name="PART_SelectedColorView" Margin="0,3" Grid.Row="7"/>
 
                         <!--Eye Dropper-->
                         <Button x:Name="PART_EyedropperButton" Grid.Column="1" Grid.Row="7" Margin="3" />

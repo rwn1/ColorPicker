@@ -8,7 +8,7 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double d)
+            if (value is float d)
             {
                 int rounded = (int)Math.Round(d * 100.0);
                 return $"{rounded}{parameter}";
@@ -21,7 +21,7 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
         {
             if (value is string s)
             {
-                if (double.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out double percent))
+                if (float.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out float percent))
                 {
                     return percent / 100.0;
                 }
@@ -29,6 +29,10 @@ namespace ColorPicker.View.Wpf.Utilities.Converters
             else if (value is double d)
             {
                 return d / 100.0;
+            }
+            else if (value is float f)
+            {
+                return f / 100.0;
             }
 
             return value;
