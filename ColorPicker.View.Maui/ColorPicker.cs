@@ -1,5 +1,6 @@
 ﻿using ColorPicker.Core.Models;
 using ColorPicker.View.Maui.Components;
+using SkiaSharp.Views.Maui;
 
 namespace ColorPicker.View.Maui;
 
@@ -43,27 +44,22 @@ public class ColorPicker : TemplatedView
     /// <summary>
     /// Hex controls.
     /// </summary>
-    private Label _hexLabel = null;
-
-    /// <summary>
-    /// Views for hue selection.
-    /// </summary>
-    private HueSelectionView _hueGraphicsView = null;
+    private Label _hexLabel;
 
     /// <summary>
     /// Views for alpha selection.
     /// </summary>
-    private AlphaSelectionView _alphaSelectionView = null;
+    private AlphaSelectionView _alphaSelectionView;
 
     /// <summary>
     /// Views for selected color.
     /// </summary>
-    private SelectedColorView _selectedColorView = null;
+    private SelectedColorView _selectedColorView;
 
     /// <summary>
     /// Graphics view for color selection.
     /// </summary>
-    private ColorSelectionView _colorSelectionView = null;
+    private ColorSelectionView _colorSelectionView;
 
     /// <summary>
     /// Initializes a new instance of the ColorPicker class.
@@ -71,48 +67,15 @@ public class ColorPicker : TemplatedView
     public ColorPicker()
     {
         _viewModel = new ColorPickerViewModel();
-        _viewModel.Hsv.PropertyChanged += (sender, e) =>
-        {
-            if (e.PropertyName == nameof(HsvModel.Hue))
-            {
-                if (_colorSelectionView != null)
-                {
-                    if (_colorSelectionView.Hue != _viewModel.Hsv.Hue)
-                    {
-                        _colorSelectionView.Hue = _viewModel.Hsv.Hue;
-
-                        if (_hueGraphicsView != null && _hueGraphicsView.Hue != _viewModel.Hsv.Hue)
-                        {
-                            if (_hueGraphicsView != null)
-                                _hueGraphicsView.Hue = _viewModel.Hsv.Hue;
-                        }
-                    }
-
-                }
-            }
-            else if (e.PropertyName == nameof(HsvModel.Saturation) || e.PropertyName == nameof(HsvModel.Value))
-            {
-                if (_colorSelectionView != null)
-                {
-                    _colorSelectionView.UpdateHsv(_viewModel.Hsv.Saturation, _viewModel.Hsv.Value);
-                }
-            }
-        };
         _viewModel.Hex.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(HexModel.Hex))
             {
                 Color color = Color.FromArgb(_viewModel.Hex.Hex);
 
-                if (_alphaSelectionView != null)
-                {
-                    _alphaSelectionView.SelectedColor = color;
-                }
-
-                if (_selectedColorView != null)
-                {
-                    _selectedColorView.SelectedColor = color;
-                }
+                var c = color.ToSKColor();
+                _alphaSelectionView?.SetSelectedColor(c);
+                _selectedColorView?.SetFillColor(c);
 
                 SelectedColor = color;
             }
@@ -121,13 +84,16 @@ public class ColorPicker : TemplatedView
         {
             if (e.PropertyName == nameof(AlphaModel.Alpha))
             {
-                if (_alphaSelectionView != null)
-                {
-                    if (_alphaSelectionView.Alpha != _viewModel.Alpha.Alpha)
-                    {
-                        _alphaSelectionView.Alpha = _viewModel.Alpha.Alpha;
-                    }
-                }
+                _alphaSelectionView?.SetAlpha(_viewModel.Alpha.Alpha);
+            }
+        };
+        _viewModel.Rgb.PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(RgbModel.Red) ||
+                e.PropertyName == nameof(RgbModel.Green) ||
+                e.PropertyName == nameof(RgbModel.Blue))
+            {
+                _colorSelectionView?.SetSelectedColor(_viewModel.Rgb.Red, _viewModel.Rgb.Green, _viewModel.Rgb.Blue);
             }
         };
     }
@@ -139,18 +105,6 @@ public class ColorPicker : TemplatedView
         // Hex
         _hexLabel = GetPart<Label>("PART_HexLabel");
         BindLabel(_hexLabel, _viewModel.Hex, nameof(ColorPickerViewModel.Hex.Hex));
-
-        // Hue
-        if (_hueGraphicsView != null)
-        {
-            _hueGraphicsView.Dispose();
-        }
-
-        _hueGraphicsView = GetPart<HueSelectionView>("PART_HueSelectionView");
-        if (_hueGraphicsView != null)
-        {
-            _hueGraphicsView.ViewModel = _viewModel;
-        }
 
         // Alpha
         if (_alphaSelectionView != null)
@@ -175,7 +129,6 @@ public class ColorPicker : TemplatedView
         {
             _colorSelectionView.Dispose();
         }
-
         _colorSelectionView = GetPart<ColorSelectionView>("PART_ColorSelectionView");
         if (_colorSelectionView != null)
         {
@@ -201,8 +154,3 @@ public class ColorPicker : TemplatedView
             new Binding(path) { Source = dataContext, Mode = BindingMode.OneWay });
     }
 }
-
-/// <summary>
-/// Selection orientation types.
-/// </summary>
-public enum SelectionOrientation { Vertical, Horizontal }

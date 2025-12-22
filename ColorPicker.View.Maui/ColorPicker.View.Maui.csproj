@@ -10,7 +10,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<PackageId>ColorPicker.View.Maui</PackageId>
-		<Version>1.0.1</Version>
+		<Version>1.0.0</Version>
 		<Authors>rwn1</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>ColorPicker.View.Maui provides a set of reusable MAUI elements for color selection and visualization. It leverages ColorPicker.Core for all color logic and conversions, offering ready-to-use UI components such as color selection, hue selection, alpha selection, selected color, and label for Hex format.</Description>
