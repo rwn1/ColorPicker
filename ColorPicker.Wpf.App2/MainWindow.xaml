@@ -1,4 +1,4 @@
-﻿<Window x:Class="ColorPicker.App2.MainWindow"
+﻿<Window x:Class="ColorPicker.Wpf.App2.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -24,13 +24,16 @@
                                         <RowDefinition Height="26"/>
                                     </Grid.RowDefinitions>
 
-                                    <Canvas x:Name="PART_ColorSelectionCanvas" />
+                                    <!--Color selection-->
+                                    <Canvas x:Name="PART_ColorSelectionView" />
 
-                                    <Canvas x:Name="PART_VerticalHueCanvas" Grid.Column="1" Margin="3,0" />
+                                    <!--Hue selection-->
+                                    <Canvas x:Name="PART_HueSelectionView" Grid.Column="1" Margin="3,0" />
 
-                                    <Rectangle x:Name="PART_SelectedColorBackground" Margin="0,3" Grid.Row="1" />
-                                    <Rectangle x:Name="PART_SelectedColor" Margin="0,3" Grid.Row="1" />
+                                    <!--Selected color-->
+                                    <Border x:Name="PART_SelectedColorView" Margin="0,3" Grid.Row="1" />
 
+                                    <!--Eye dropper-->
                                     <Button x:Name="PART_EyedropperButton" Margin="3" Grid.Column="1" Grid.Row="1" />
 
                                 </Grid>

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ColorPicker.App2
+namespace ColorPicker.Wpf.App3
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

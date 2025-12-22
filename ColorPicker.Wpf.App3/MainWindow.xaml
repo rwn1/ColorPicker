@@ -1,4 +1,4 @@
-﻿<Window x:Class="ColorPicker.App3.MainWindow"
+﻿<Window x:Class="ColorPicker.Wpf.App3.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -40,15 +40,16 @@
                                         <ColumnDefinition Width="3*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!--Selected brush-->
-                                    <Rectangle x:Name="PART_SelectedColor" Margin="0,0,3,0"/>
+                                    <!--Selected color-->
+                                    <Border x:Name="PART_SelectedColorView" Margin="0,0,3,0"/>
                                     
-                                    <!--Brush for select-->
-                                    <Canvas x:Name="PART_ColorSelectionCanvas" Grid.Column="1" />
+                                    <!--Color selection-->
+                                    <Canvas x:Name="PART_ColorSelectionView" Grid.Column="1" />
 
-                                    <!--Hue with main brushes-->
-                                    <Canvas x:Name="PART_HorizontalHueCanvas" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,3" />
+                                    <!--Hue selection-->
+                                    <Canvas x:Name="PART_HueSelectionView" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,3" />
 
+                                    <!--HEX-->
                                     <GroupBox Header="HEX" Grid.Row="2" Grid.ColumnSpan="2">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -147,7 +148,6 @@
                                             </Grid>
                                         </GroupBox>
                                     </Grid>
-                                    
 
                                 </Grid>
                             </ControlTemplate>

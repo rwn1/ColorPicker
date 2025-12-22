@@ -1,7 +1,7 @@
-﻿using ColorPicker.App1.ViewModels;
+﻿using ColorPicker.Wpf.App3.ViewModels;
 using System.Windows;
 
-namespace ColorPicker.App1
+namespace ColorPicker.Wpf.App3
 {
     /// <summary>
     /// Interaction logic for App.xaml

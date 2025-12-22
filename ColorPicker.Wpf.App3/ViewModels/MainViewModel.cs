@@ -1,7 +1,7 @@
 ﻿using ColorPicker.Core.Models;
 using System.Windows.Media;
 
-namespace ColorPicker.App3.ViewModels
+namespace ColorPicker.Wpf.App3.ViewModels
 {
     internal class MainViewModel: ObservableObject
     {

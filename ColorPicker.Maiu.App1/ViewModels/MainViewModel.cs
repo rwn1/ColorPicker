@@ -13,11 +13,11 @@ namespace ColorPicker.Maui.App1.ViewModels
             get => _selectedColor;
             set
             {
-                if (_selectedColor?.ToString() != value?.ToString()) 
-                {
-                    _selectedColor = value;
-                    NotifyPropertyChanged();
-                }
+                if (Equals(_selectedColor, value))
+                    return;
+
+                _selectedColor = value;
+                NotifyPropertyChanged();
             }
         }
 
