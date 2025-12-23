@@ -5,18 +5,18 @@ namespace ColorPicker.Wpf.App1.ViewModels
 {
     internal class MainViewModel: ObservableObject
     {
-        private Brush _selectedBrush;
+        private Brush _selectedColor;
         /// <summary>
         /// Gets or sets the selected color.
         /// </summary>
-        public Brush SelectedBrush
+        public Brush SelectedColor
         {
-            get => _selectedBrush;
+            get => _selectedColor;
             set
             {
-                if (_selectedBrush?.ToString() != value?.ToString()) 
+                if (_selectedColor?.ToString() != value?.ToString()) 
                 {
-                    _selectedBrush = value;
+                    _selectedColor = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -27,7 +27,7 @@ namespace ColorPicker.Wpf.App1.ViewModels
         /// </summary>
         public MainViewModel()
         {
-            _selectedBrush = Brushes.Teal;
+            _selectedColor = Brushes.Teal;
         }
     }
 }

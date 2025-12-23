@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="550" Width="800">
     <Grid>
-        <controls:ColorPicker SelectedBrush="{Binding SelectedBrush, Mode=TwoWay}"  Margin="4">
+        <controls:ColorPicker SelectedColor="{Binding SelectedColor, Mode=TwoWay}"  Margin="4">
             <controls:ColorPicker.Style>
                 <Style TargetType="{x:Type controls:ColorPicker}">
                     <Setter Property="Template">
@@ -17,6 +17,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="26"/>
                                         <ColumnDefinition Width="26"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
@@ -30,11 +31,14 @@
                                     <!--Hue selection-->
                                     <Canvas x:Name="PART_HueSelectionView" Grid.Column="1" Margin="3,0" />
 
+                                    <!--Alpha selection-->
+                                    <Canvas x:Name="PART_AlphaSelectionView" Grid.Column="2" Margin="3,0" />
+
                                     <!--Selected color-->
                                     <Border x:Name="PART_SelectedColorView" Margin="0,3" Grid.Row="1" />
 
                                     <!--Eye dropper-->
-                                    <Button x:Name="PART_EyedropperButton" Margin="3" Grid.Column="1" Grid.Row="1" />
+                                    <Button x:Name="PART_EyedropperButton" Grid.ColumnSpan="2" Margin="3" Grid.Column="1" Grid.Row="1" />
 
                                 </Grid>
 
