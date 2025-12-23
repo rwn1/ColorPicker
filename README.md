@@ -28,7 +28,8 @@ dotnet add package ColorPicker.View.Wpf
 This *Control* is composed of several *WPF* template parts.
 When creating a custom *ControlTemplate*, not all template parts are required — the control is designed to function even if some are omitted.
 
-<img width="936" height="460" src="https://github.com/user-attachments/assets/c9b76ff5-c695-4c5d-96c2-b67fe4865b95" />
+<img width="936" height="460" src="https://github.com/user-attachments/assets/88eb7fa9-2083-4d1e-bf70-28d2d9869c68" />
+
 
 The control allows you to customize the visualization of its individual parts.
 When a *ControlTemplate* is applied, not all parts have to be included.
