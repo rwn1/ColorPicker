@@ -33,6 +33,7 @@ internal class ColorSelectionBackground : SKGLView, IDisposable
     /// </summary>
     private void ColorSelectionBackground_SizeChanged(object? sender, EventArgs e)
     {
+        _backgroundBitmap = null;
         InvalidateSurface();
     }
 
@@ -46,7 +47,8 @@ internal class ColorSelectionBackground : SKGLView, IDisposable
 
         var canvas = e.Surface.Canvas;
 
-        _backgroundBitmap = CreateBitmap(e.Info.Width, e.Info.Height);
+        if (_backgroundBitmap == null)
+            _backgroundBitmap = CreateBitmap(e.Info.Width, e.Info.Height);
 
         canvas.DrawBitmap(_backgroundBitmap, 0, 0);
     }
@@ -59,24 +61,16 @@ internal class ColorSelectionBackground : SKGLView, IDisposable
     /// <returns>The bitmap of the color palette.</returns>
     private SKBitmap CreateBitmap(int width, int height)
     {
-        var bitmap = new SKBitmap(
-              width, height,
-              SKColorType.Bgra8888,
-              SKAlphaType.Premul);
-
-        Span<byte> pixels = bitmap.GetPixelSpan();
-        int index = 0;
-
+        var bitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
+        byte[] pixels = new byte[width * height * 4];
         int half = height / 2;
 
-        for (int y = 0; y < height; y++)
+        Parallel.For(0, height, y =>
         {
             bool top = y < half;
-
             for (int x = 0; x < width; x++)
             {
                 float h = (float)x / (width - 1) * 360.0f;
-
                 float s, v;
 
                 if (top)
@@ -92,14 +86,18 @@ internal class ColorSelectionBackground : SKGLView, IDisposable
 
                 ColorConversions.HsvToRgb(h, s, v, out byte r, out byte g, out byte b);
 
-                pixels[index++] = b;
-                pixels[index++] = g;
-                pixels[index++] = r;
-                pixels[index++] = 255;
+                int index = (y * width + x) * 4;
+                pixels[index] = b;
+                pixels[index + 1] = g;
+                pixels[index + 2] = r;
+                pixels[index + 3] = 255;
             }
-        }
+        });
 
-        _shareModel.Pixels = pixels.ToArray();
+        pixels.CopyTo(bitmap.GetPixelSpan());
+
+        _shareModel.Pixels = pixels;
+
         return bitmap;
     }
 
