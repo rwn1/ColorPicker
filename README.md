@@ -4,17 +4,17 @@ This implementation solves the issue where each technology uses its own color-re
 
 <img width="514" height="262" src="https://github.com/user-attachments/assets/a57439f0-c670-46fc-b887-c9ac2857c901" />
 
-### 🧪 Testing
+## 🧪 Testing
 `ColorPicker.Core` contains all the main logic, algorithms, and color conversion routines.
 `ColorPicker.Core.Tests` uses *xUnit* to verify correctness of calculations, property updates, and other core functionality independent of the UI.
 
-## WPF Color Picker
+# WPF Color Picker
 <img width="148" height="147" alt="image" src="https://github.com/user-attachments/assets/6d2dba81-0b72-4e4a-84ec-57fb7256ffd1" />
 
 The *WPF* implementation supports both legacy *.NET Framework* applications as well as modern *.NET*, allowing the control to be used across a wide range of *WPF* projects.
 The control is designed for flexible and precise color selection, suitable for both simple and advanced use cases. It is composed of multiple template parts (PART_*), allowing developers to fully customize its layout and behavior through *ControlTemplate*.
 
-### 🔧 Installation
+## 🔧 Installation
 The core library `ColorPicker.Core` and the *WPF* UI implementation `ColorPicker.View.Wpf` (including `ColorPicker.Core`) are available as NuGet packages:
 
 ```powershell
@@ -24,7 +24,7 @@ dotnet add package ColorPicker.Core
 dotnet add package ColorPicker.View.Wpf
 ```
 
-### 🧬 Control template parts (PART_*)
+## 🧬 Control template parts (PART_*)
 This *Control* is composed of several *WPF* template parts.
 When creating a custom *ControlTemplate*, not all template parts are required — the control is designed to function even if some are omitted.
 
@@ -46,7 +46,7 @@ It is also possible to use *PART_EyedropperButton* to pick a color from the scre
 
 The resulting color can be bind to your own *ViewModel* via the *SelectedColor* property exposed by the *ColorPicker*, allowing you to extend or customize the existing solution.
 
-### 🧩 Implementations
+## 🧩 Implementations
 A simple, minimalist implementation that avoids the need for manual value entry.
 This setup is entirely mouse-driven and includes only the essential template parts required to select a color.
 
@@ -270,7 +270,7 @@ xmlns:controls="clr-namespace:ColorPicker.View.Wpf;assembly=ColorPicker.View.Wpf
 </controls:ColorPicker>
 ```
 
-### 🔎 Project samples
+## 🔎 Project samples
 The solution includes three sample (`ColorPicker.Wpf.App1`, `ColorPicker.Wpf.App2` and `ColorPicker.Wpf.App3`) applications demonstrating how to use the ColorPicker libraries.
 These samples show:
 
@@ -282,18 +282,18 @@ These samples show:
 
 You can explore the sample projects to see ready-to-use implementations and learn how to integrate the libraries into your own *WPF* applications.
 
-### 🧪 Testing
+## 🧪 Testing
 `ColorPicker.View.Wpf` implements the *WPF* user interface for the color picker, including all *PART_** template parts.
 `ColorPicker.View.Wpf.Tests` uses *FlaUI* for automated UI testing. Tests interact with *PART_** elements, which allows coverage of different UI implementations and ensures the control behaves correctly regardless of the applied template.
 
 **Note:** UI tests rely on *PART_** names to locate elements, but not all *PART_** elements need to be present. This makes tests flexible and able to cover different templates and partial implementations without modification.
 
-## .NET MAUI Color Picker
+# .NET MAUI Color Picker
 <img width="145" height="143" alt="image" src="https://github.com/user-attachments/assets/4f98254f-d7e8-472b-950d-8961bd01e24b" />
 
 The .NET MAUI implementation is intentionally very minimalistic, as the technology is not yet fully optimized for handling frequent value changes in controls such as *Entry* and *Slider* (unlike *WPF*). The control provides a graphical interface for adjusting both the color and its transparency. For optimal performance and responsiveness, standard controls were insufficient, so custom UI controls were implemented.
 
-### 🔧 Installation
+## 🔧 Installation
 The core library `ColorPicker.Core` and the *.NET MAUI* UI implementation `ColorPicker.View.Maui` (including `ColorPicker.Core`) are available as NuGet packages:
 
 ```powershell
@@ -303,7 +303,7 @@ dotnet add package ColorPicker.Core
 dotnet add package ColorPicker.View.Maui
 ```
 
-### 🧬 Control template parts (PART_*)
+## 🧬 Control template parts (PART_*)
 When using the *ColorPicker*, you must always define the layout of its individual parts in *ControlTemplate*.
 
 The final color selection is handled through *PART_ColorSelectionView*, where you can also configure the selection circle radius using the *MarkRadius* property on this element.
@@ -318,7 +318,7 @@ To display the resulting color in hexadecimal form, you can use *PART_HexLabel*.
 None of these component parts are mandatory.
 The resulting color of the *ColorPicker* can be bound to your *ViewModel* through the *SelectedColor* property, which allows you to use only *PART_ColorSelectionView* and build the rest of the UI yourself.
 
-### 🧩 Implementations
+## 🧩 Implementations
 The implementation uses SkiaSharp, so any application using this component must register it in the builder.
 ```xml
 builder.UseSkiaSharp();
@@ -374,7 +374,7 @@ For the Android platform, it is recommended to adjust the color selection radius
 ```
 <img width="270" height="585" alt="Android" src="https://github.com/user-attachments/assets/3988f574-7498-4146-bc1f-b6fa69bc066c" />
 
-### 🔎 Project sample
+## 🔎 Project sample
 The solution includes one sample (`ColorPicker.Maui.App1`) applications demonstrating how to use the ColorPicker libraries. The application is cross-platform and can be run on multiple platforms.
 These sample show:
 
