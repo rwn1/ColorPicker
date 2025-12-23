@@ -276,7 +276,7 @@ These samples show:
 
 * Integration of `ColorPicker.View.Wpf`
 
-* How to bind the *SelectedColor* of ColorPicker to your own *ViewModel*
+* How to bind the *SelectedColor* of *ColorPicker* to your own *ViewModel*
 
 * Practical usage of color UI components
 
@@ -380,7 +380,7 @@ These sample show:
 
 * Integration of `ColorPicker.View.Maui`
 
-* How to bind the *SelectedColor* of ColorPicker to your own *ViewModel*
+* How to bind the *SelectedColor* of *ColorPicker* to your own *ViewModel*
 
 * Practical usage of color UI components
 
