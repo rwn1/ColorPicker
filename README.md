@@ -9,7 +9,7 @@ This implementation solves the issue where each technology uses its own color-re
 `ColorPicker.Core.Tests` uses *xUnit* to verify correctness of calculations, property updates, and other core functionality independent of the UI.
 
 # WPF Color Picker
-<img width="148" height="147" alt="image" src="https://github.com/user-attachments/assets/6d2dba81-0b72-4e4a-84ec-57fb7256ffd1" />
+<img width="148" height="147" src="https://github.com/user-attachments/assets/75d27d9d-6349-4b36-b8ef-c2e11c017bcd" />
 
 The *WPF* implementation supports both legacy *.NET Framework* applications as well as modern *.NET*, allowing the control to be used across a wide range of *WPF* projects.
 The control is designed for flexible and precise color selection, suitable for both simple and advanced use cases. It is composed of multiple template parts (PART_*), allowing developers to fully customize its layout and behavior through *ControlTemplate*.
@@ -28,7 +28,7 @@ dotnet add package ColorPicker.View.Wpf
 This *Control* is composed of several *WPF* template parts.
 When creating a custom *ControlTemplate*, not all template parts are required — the control is designed to function even if some are omitted.
 
-<img width="936" height="460" src="https://github.com/user-attachments/assets/88eb7fa9-2083-4d1e-bf70-28d2d9869c68" />
+<img width="936" height="460" src="https://github.com/user-attachments/assets/9ba3e0ed-75b8-433e-a7e9-9cd1c16570c0" />
 
 
 The control allows you to customize the visualization of its individual parts.
@@ -109,7 +109,7 @@ This advanced layout is designed for applications that require detailed color ma
 
 Like all other template variations, each part can be freely styled, rearranged, replaced, or omitted using a custom *ControlTemplate*. Developers can choose which color models to expose and can combine or remove UI elements depending on the needs of their application.
 
-<img width="583" height="383" src="https://github.com/user-attachments/assets/3849abad-4e3e-437a-9ef5-eb4eb7d99872" />
+<img width="583" height="383" src="https://github.com/user-attachments/assets/6d3de72b-aa9d-49e8-96d9-636d6b0060ac" />
 
 ```xml
 xmlns:controls="clr-namespace:ColorPicker.View.Wpf;assembly=ColorPicker.View.Wpf"
@@ -289,7 +289,7 @@ You can explore the sample projects to see ready-to-use implementations and lear
 **Note:** UI tests rely on *PART_** names to locate elements, but not all *PART_** elements need to be present. This makes tests flexible and able to cover different templates and partial implementations without modification.
 
 # .NET MAUI Color Picker
-<img width="145" height="143" alt="image" src="https://github.com/user-attachments/assets/4f98254f-d7e8-472b-950d-8961bd01e24b" />
+<img width="145" height="143" src="https://github.com/user-attachments/assets/16c5283f-987d-4b67-81de-94aa47c72828" />
 
 The .NET MAUI implementation is intentionally very minimalistic, as the technology is not yet fully optimized for handling frequent value changes in controls such as *Entry* and *Slider* (unlike *WPF*). The control provides a graphical interface for adjusting both the color and its transparency. For optimal performance and responsiveness, standard controls were insufficient, so custom UI controls were implemented.
 
