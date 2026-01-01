@@ -1,4 +1,5 @@
 ﻿using ColorPicker.Core.Models;
+using ColorPicker.Core.Utilities;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -180,7 +181,7 @@ public class ColorSyncHub: ObservableObject
     /// <param name="g">Green component.</param>
     /// <param name="b">Blue component.</param>
     /// <param name="alpha">Alpha component.</param>
-    public void SetColor(byte r, byte g, byte b, float alpha)
+    internal void SetColor(byte r, byte g, byte b, float alpha)
     {
         if (IsSyncing) return;
         IsSyncing = true;
@@ -193,6 +194,43 @@ public class ColorSyncHub: ObservableObject
         Hex.SetFromHub(ToHexArgbString(r, g, b, alpha));
 
         IsSyncing = false;
+    }
+
+    /// <summary>
+    /// Sets the color to all color models.
+    /// </summary>
+    /// <param name="h">Hue component.</param>
+    /// <param name="s">Saturation component.</param>
+    /// <param name="v">Value (brightness) component.</param>
+    /// <param name="alpha">Alpha component.</param>
+    internal void SetColor(float h, float s, float v, float alpha)
+    {
+        if (IsSyncing) return;
+        IsSyncing = true;
+
+        Hsv.SetFromHub(h, s, v);
+        Rgb.FromHsv(h, s, v);
+        Alpha.SetFromHub(alpha);
+        if (EnableHsl) Hsl.FromHsv(h, s, v);
+        if (EnableCmyk) Cmyk.FromHsv(h, s, v);
+        Hex.SetFromHub(ToHexArgbString(h, s, v, alpha));
+
+        IsSyncing = false;
+    }
+
+    /// <summary>
+    /// Returns the color in hexadecimal format from RGB components.
+    /// </summary>
+    /// <param name="h">Hue component.</param>
+    /// <param name="s">Saturation component.</param>
+    /// <param name="v">Value (brightness) component.</param>
+    /// <param name="alpha">Alpha component.</param>
+    /// <returns>The color in hexadecimal format from RGB components.</returns>
+    private static string ToHexArgbString(float h, float s, float v, float alpha)
+    {
+        ColorConversions.HsvToRgb(h, s, v, out byte rr, out byte gg, out byte bb);
+        byte a = (byte)Math.Round(Clamp01(alpha) * 255.0);
+        return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", a, rr, gg, bb);
     }
 
     /// <summary>

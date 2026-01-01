@@ -108,5 +108,17 @@ namespace ColorPicker.Core.Models
             ColorConversions.RgbToHsl(r, g, b, out float hh, out float ss, out float ll);
             SetFromHub(hh, ss, ll);
         }
+
+        /// <summary>
+        /// Updates HSL values from an HSV input.
+        /// </summary>
+        /// <param name="h">Hue component.</param>
+        /// <param name="s">Saturation component.</param>
+        /// <param name="v">Value (brightness) component.</param>
+        internal void FromHsv(float h, float s, float v)
+        {
+            ColorConversions.HsvToHsl(h, s, v, out float hh, out float ss, out float ll);
+            SetFromHub(hh, ss, ll);
+        }
     }
 }

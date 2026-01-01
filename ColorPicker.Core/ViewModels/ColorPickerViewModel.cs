@@ -99,4 +99,17 @@ public class ColorPickerViewModel : ObservableObject
         _hub.SetColor(r, g, b, alpha);
         NotifyPropertyChanged(nameof(Alpha));
     }
+
+    /// <summary>
+    /// Select the new colot.
+    /// </summary>
+    /// <param name="hue">Hue component.</param>
+    /// <param name="saturation">Saturation component.</param>
+    /// <param name="value">Value (brightness) component.</param>
+    /// <param name="alpha">Alpha component.</param>
+    public void SelectColor(float hue, float saturation, float value, float alpha = 1.0f)
+    {
+        _hub.SetColor(hue, saturation, value, alpha);
+        NotifyPropertyChanged(nameof(Alpha));
+    }
 }

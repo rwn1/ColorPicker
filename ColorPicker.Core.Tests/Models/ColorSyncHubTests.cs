@@ -131,7 +131,7 @@
         }
 
         [Fact]
-        public void SetColor_SetsAllModelsCorrectly()
+        public void SetColor_SetsAllModelsCorrectlyFromRgb()
         {
             // Arrange
             var hub = new ColorSyncHub();
@@ -145,6 +145,26 @@
             Assert.Equal(10, hub.Rgb.Red);
             Assert.Equal(20, hub.Rgb.Green);
             Assert.Equal(30, hub.Rgb.Blue);
+            Assert.Equal(0.75, hub.Alpha.Alpha);
+
+            Assert.Equal("#BF0A141E", hub.Hex.Hex); // BF = 0xBF = 191 = 0.75 * 255
+        }
+
+        [Fact]
+        public void SetColor_SetsAllModelsCorrectlyHsv()
+        {
+            // Arrange
+            var hub = new ColorSyncHub();
+            hub.EnableHsl = true;
+            hub.EnableCmyk = true;
+
+            // Act
+            hub.SetColor(10f, 0.2f, 0.3f, 0.75f);
+
+            // Assert
+            Assert.Equal(10f, hub.Hsv.Hue);
+            Assert.Equal(0.2f, hub.Hsv.Saturation);
+            Assert.Equal(0.3f, hub.Hsv.Value);
             Assert.Equal(0.75, hub.Alpha.Alpha);
 
             Assert.Equal("#BF0A141E", hub.Hex.Hex); // BF = 0xBF = 191 = 0.75 * 255

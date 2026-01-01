@@ -105,14 +105,15 @@
             Assert.Equal(0, vm.Rgb.Blue);
 
             // Alpha model
-            Assert.Equal(0.5, vm.Alpha.Alpha, 6);
+            Assert.Equal(0.5f, vm.Alpha.Alpha, 6);
         }
 
         [Fact]
-        public void SelectColor_RaisesPropertyChangedForAlphaOnly()
+        public void SelectColor_RaisesPropertyChangedRgbForAlphaOnly()
         {
             // Arrange
             var vm = new ColorPickerViewModel();
+            vm.SelectColor(100, 50, 25, 1f);
 
             var raised = new List<string>();
             vm.PropertyChanged += (_, e) => raised.Add(e.PropertyName!);
@@ -127,16 +128,65 @@
         }
 
         [Fact]
-        public void SelectColor_UpdatesHexValue()
+        public void SelectColor_UpdatesHexValueFromRgb()
         {
             // Arrange
             var vm = new ColorPickerViewModel();
 
             // Act
-            vm.SelectColor(255, 0, 0, 1.0f);
+            vm.SelectColor(255, 0, 0, 1f);
 
             // Assert
             Assert.Equal("#FFFF0000", vm.Hex.Hex);
+        }
+
+        [Fact]
+        public void SelectColor_UpdatesHsvAndAlpha()
+        {
+            // Arrange
+            var vm = new ColorPickerViewModel();
+
+            vm.SelectColor(300, 0.6f, 0.1f, 0.5f);
+
+            // HSV is publicly verifiable
+            Assert.Equal(300, vm.Hsv.Hue);
+            Assert.Equal(0.6f, vm.Hsv.Saturation);
+            Assert.Equal(0.1f, vm.Hsv.Value);
+
+            // Alpha model
+            Assert.Equal(0.5f, vm.Alpha.Alpha, 6);
+        }
+
+        [Fact]
+        public void SelectColor_RaisesPropertyChangedHsvForAlphaOnly()
+        {
+            // Arrange
+            var vm = new ColorPickerViewModel();
+            vm.SelectColor(100, 50, 25, 1f);
+
+            var raised = new List<string>();
+            vm.PropertyChanged += (_, e) => raised.Add(e.PropertyName!);
+
+            // Act
+            vm.SelectColor(100, 50, 25, 0.33f);
+
+            // Assert
+            Assert.Contains(nameof(ColorPickerViewModel.Alpha), raised);
+            Assert.DoesNotContain(nameof(ColorPickerViewModel.Rgb), raised);
+            Assert.DoesNotContain(nameof(ColorPickerViewModel.Hsv), raised);
+        }
+
+        [Fact]
+        public void SelectColor_UpdatesHexValueFromHsv()
+        {
+            // Arrange
+            var vm = new ColorPickerViewModel();
+
+            // Act
+            vm.SelectColor(300, 0.6f, 0.1f, 1f);
+
+            // Assert
+            Assert.Equal("#FF1A0A1A", vm.Hex.Hex);
         }
     }
 }

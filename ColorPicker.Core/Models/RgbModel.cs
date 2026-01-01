@@ -1,4 +1,6 @@
-﻿namespace ColorPicker.Core.Models
+﻿using ColorPicker.Core.Utilities;
+
+namespace ColorPicker.Core.Models
 {
     /// <summary>
     /// Object representing operations with RGB color components.
@@ -76,6 +78,18 @@
                 NotifyPropertyChanged(nameof(Blue));
 
             SetSuppressChanged(false);
+        }
+
+        /// <summary>
+        /// Updates RGB values from an HSV input.
+        /// </summary>
+        /// <param name="h">Hue component.</param>
+        /// <param name="s">Saturation component.</param>
+        /// <param name="v">Value (brightness) component.</param>
+        internal void FromHsv(float h, float s, float v)
+        {
+            ColorConversions.HsvToRgb(h, s, v, out byte rr, out byte gg, out byte bb);
+            SetFromHub(rr, gg, bb);
         }
     }
 }

@@ -170,6 +170,81 @@ namespace ColorPicker.Core.Utilities
         }
 
         /// <summary>
+        /// Color convertions from RGB to CMYK.
+        /// </summary>
+        /// <param name="r">Red component.</param>
+        /// <param name="g">Green component.</param>
+        /// <param name="b">Blue component.</param>
+        /// <param name="c">Cyan component.</param>
+        /// <param name="m">Magenta component.</param>
+        /// <param name="y">Yellow component.</param>
+        /// <param name="k">Key (black) component.</param>
+        public static void RgbToCmyk(byte r, byte g, byte b, out float c, out float m, out float y, out float k)
+        {
+            float rd = r / 255.0f;
+            float gd = g / 255.0f;
+            float bd = b / 255.0f;
+
+            k = 1.0f - Math.Max(rd, Math.Max(gd, bd));
+            c = 0.0f;
+            m = 0.0f;
+            y = 0.0f;
+
+            if (Math.Abs(1.0 - k) > 1e-9)
+            {
+                c = (1.0f - rd - k) / (1.0f - k);
+                m = (1.0f - gd - k) / (1.0f - k);
+                y = (1.0f - bd - k) / (1.0f - k);
+            }
+            else
+            {
+                c = 0; m = 0; y = 0;
+            }
+
+            c = Clamp01(c);
+            m = Clamp01(m);
+            y = Clamp01(y);
+            k = Clamp01(k);
+        }
+
+        /// <summary>
+        /// Color convertions from HSV to HSL.
+        /// </summary>
+        /// <param name="h">Hue component.</param>
+        /// <param name="s">Saturation component.</param>
+        /// <param name="v">Value component.</param>
+        /// <param name="h">Hue component.</param>
+        /// <param name="s">Saturation component.</param>
+        /// <param name="l">Lightness component.</param>
+        public static void HsvToHsl(float h, float s, float v, out float hslH, out float hslS, out float hslL)
+        {
+            hslH = NormalizeHue(h);
+
+            hslL = v * (1.0f - s / 2.0f);
+
+            if (hslL <= 0.0 || hslL >= 1.0)
+            {
+                hslS = 0.0f;
+            }
+            else
+            {
+                hslS = (v - hslL) / Math.Min(hslL, 1.0f - hslL);
+            }
+        }
+
+        /// <summary>
+        /// Normalizes a hue value to the range [0, 360].
+        /// </summary>
+        /// <param name="h">Hue to normalize.</param>
+        /// <returns>Normalized hue.</returns>
+        private static float NormalizeHue(float h)
+        {
+            h %= 360.0f;
+            if (h < 0) h += 360.0f;
+            return h;
+        }
+
+        /// <summary>
         /// Returns the clamp value to the 0–1 range.
         /// </summary>
         /// <param name="v">Value to clamp.</param>

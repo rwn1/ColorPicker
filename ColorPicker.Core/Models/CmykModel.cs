@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ColorPicker.Core.Utilities;
+using System;
 
 namespace ColorPicker.Core.Models
 {
@@ -105,31 +106,28 @@ namespace ColorPicker.Core.Models
         }
 
         /// <summary>
-        /// Updates SMYK values from an RGB input.
+        /// Updates CMYK values from an RGB input.
         /// </summary>
         /// <param name="r">Red component.</param>
         /// <param name="g">Green component.</param>
         /// <param name="b">Blue component.</param>
         internal void FromRgb(byte r, byte g, byte b)
         {
-            float rd = r / 255.0f;
-            float gd = g / 255.0f;
-            float bd = b / 255.0f;
+            ColorConversions.RgbToCmyk(r, g, b, out float cc, out float mm, out float yy, out float kk);
+            SetFromHub(cc, mm, yy, kk);
+        }
 
-            float k = 1.0f - Math.Max(rd, Math.Max(gd, bd));
-            float c = 0.0f, m = 0.0f, y = 0.0f;
-            if (Math.Abs(1.0 - k) > 1e-9)
-            {
-                c = (1.0f - rd - k) / (1.0f - k);
-                m = (1.0f - gd - k) / (1.0f - k);
-                y = (1.0f - bd - k) / (1.0f - k);
-            }
-            else
-            {
-                c = 0; m = 0; y = 0;
-            }
-
-            SetFromHub(Clamp01(c), Clamp01(m), Clamp01(y), Clamp01(k));
+        /// <summary>
+        /// Updates CMYK values from an HSV input.
+        /// </summary>
+        /// <param name="h">Hue component.</param>
+        /// <param name="s">Saturation component.</param>
+        /// <param name="v">Value (brightness) component.</param>
+        internal void FromHsv(float h, float s, float v)
+        {
+            ColorConversions.HsvToRgb(h, s, v, out byte rr, out byte gg, out byte bb);
+            ColorConversions.RgbToCmyk(rr, gg, bb, out float cc, out float mm, out float yy, out float kk);
+            SetFromHub(cc, mm, yy, kk);
         }
 
         /// <summary>
