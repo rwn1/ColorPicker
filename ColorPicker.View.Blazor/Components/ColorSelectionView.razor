@@ -1,0 +1,153 @@
+﻿@using Microsoft.JSInterop
+@using global::ColorPicker.Core.Models
+@using global::ColorPicker.Core.Utilities
+@using global::ColorPicker.View.Blazor.Models
+@implements IDisposable;
+
+<style>
+    .colorSelection-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .colorSelection-container canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        inset: 0;
+    }
+</style>
+
+<div class="colorSelection-container">
+    <canvas @ref="_colorSelectionBackground"></canvas>
+    <canvas @ref="_colorSelectionMark"></canvas>
+</div>
+
+@code {
+
+    private ElementReference _colorSelectionBackground;
+    private ElementReference _colorSelectionMark;
+
+    private IJSObjectReference _colorSelectionBackgroundJs = default!;
+    private IJSObjectReference _colorSelectionMarkJs = default!;
+
+    private DotNetObjectReference<ColorSelectionView>? _dotNetRef;
+
+    [CascadingParameter(Name = "MainViewModel")]
+    internal ColorPickerViewModel ViewModel { get; set; } = default!;
+
+    [CascadingParameter(Name = "ShareDataModel")]
+    internal ShareDataModel ShareDataModel { get; set; } = default!;
+
+    [Inject] IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// Method invoked after each time the component has been rendered interactively and the UI has finished updating.
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        _dotNetRef = DotNetObjectReference.Create(this);
+
+        await SetColorSelectionBackground();
+        await SetColorSelectionMarker();
+
+        ViewModel.Hsv.PropertyChanged += Hsv_PropertyChanged;
+    }
+
+    /// <summary>
+    /// Sets the color selection background.
+    /// </summary>
+    private async Task SetColorSelectionBackground()
+    {
+        _colorSelectionBackgroundJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/ColorSelection/colorSelectionBackground.js");
+
+        await _colorSelectionBackgroundJs.InvokeVoidAsync(
+            "initColorSelectionBackground",
+            _colorSelectionBackground,
+            ViewModel.Hsv.Hue
+        );
+    }
+
+    /// <summary>
+    /// Sets the color selection marker.
+    /// </summary>
+    private async Task SetColorSelectionMarker()
+    {
+        _colorSelectionMarkJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/ColorSelection/colorSelectionMark.js");
+
+        await _colorSelectionMarkJs.InvokeVoidAsync(
+            "initColorSelectionMarker",
+            _colorSelectionMark,
+            ViewModel.Hsv.Saturation,
+            ViewModel.Hsv.Value,
+            _dotNetRef
+        );
+    }
+
+    /// <summary>
+    /// Update the saturation and value components in main view model from change in UI.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    [JSInvokable]
+    public void OnValueChanged(float saturation, float value)
+    {
+        ShareDataModel.LastSaturation = saturation;
+        ShareDataModel.LastValue = value;
+
+        ViewModel.SelectColor(ViewModel.Hsv.Hue, saturation, value, ViewModel.Alpha.Alpha);
+    }
+
+    /// <summary>
+    /// Update the selection marker or hue from main view model.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Hsv_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            if (e.PropertyName == nameof(HsvModel.Hue))
+            {
+                await _colorSelectionBackgroundJs.InvokeVoidAsync(
+                    "updateColorSelectionBackground",
+                    _colorSelectionBackground,
+                    ViewModel.Hsv.Hue
+                );
+            }
+            if (e.PropertyName == nameof(HsvModel.Saturation) || e.PropertyName == nameof(HsvModel.Value))
+            {
+                if (ShareDataModel.LastSaturation != ViewModel.Hsv.Saturation ||
+                    ShareDataModel.LastValue != ViewModel.Hsv.Value)
+                {
+                    ShareDataModel.LastSaturation = ViewModel.Hsv.Saturation;
+                    ShareDataModel.LastValue = ViewModel.Hsv.Value;
+
+                    await _colorSelectionMarkJs.InvokeVoidAsync(
+                        "updateColorSelectionMarker",
+                        _colorSelectionMark,
+                        ViewModel.Hsv.Saturation,
+                        ViewModel.Hsv.Value
+                    );
+                }
+            }
+        });
+    }
+
+    /// <summary>
+    /// Releases all resources used by this instance.
+    /// </summary>
+    public void Dispose()
+    {
+        ViewModel.Hsv.PropertyChanged -= Hsv_PropertyChanged;
+
+        _dotNetRef?.Dispose();
+    }
+}

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<PackageId>ColorPicker.View.Blazor</PackageId>
+	<Version>1.0.0</Version>
+	<Authors>rwn1</Authors>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<Description>ColorPicker.View.Blazor provides a set of reusable Blazor elements for color selection and visualization. It leverages ColorPicker.Core for all color logic and conversions, offering ready-to-use UI components such as color selection, hue selection, alpha selection and selected color.</Description>
+	<RepositoryUrl>https://github.com/rwn1/ColorPicker</RepositoryUrl>
+	<PackageProjectUrl>https://github.com/rwn1/ColorPicker</PackageProjectUrl>
+	<PackageTags>Color, ColorPicker</PackageTags>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ColorPicker.Core\ColorPicker.Core.csproj" />
+  </ItemGroup>
+
+</Project>

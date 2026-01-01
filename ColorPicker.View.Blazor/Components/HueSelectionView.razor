@@ -1,0 +1,134 @@
+﻿@using Microsoft.JSInterop
+@using global::ColorPicker.Core.Models
+@using global::ColorPicker.View.Blazor.Models
+@implements IDisposable;
+
+<style>
+    .hue-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .hue-container canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        inset: 0;
+    }
+</style>
+
+<div class="hue-container">
+    <canvas @ref="_hueSelectionBackground"></canvas>
+    <canvas @ref="_hueSelectionMark"></canvas>
+</div>
+
+@code {
+
+    private ElementReference _hueSelectionBackground;
+    private ElementReference _hueSelectionMark;
+
+    private IJSObjectReference _hueSelectionMarkJs = default!;
+
+    private DotNetObjectReference<HueSelectionView> _dotNetRef = default!;
+
+    [CascadingParameter(Name = "MainViewModel")]
+    internal ColorPickerViewModel ViewModel { get; set; } = default!;
+
+    [CascadingParameter(Name = "ShareDataModel")]
+    internal ShareDataModel ShareDataModel { get; set; } = default!;
+
+    [Inject] IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// Method invoked after each time the component has been rendered interactively and the UI has finished updating.
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        _dotNetRef = DotNetObjectReference.Create(this);
+
+        await SetHueSelectionBackground();
+        await SetHueSelectionMarker();
+
+        ViewModel.Hsv.PropertyChanged += Hsv_PropertyChanged;
+    }
+
+    /// <summary>
+    /// Sets the hue selection background. 
+    /// </summary>
+    private async Task SetHueSelectionBackground()
+    {
+        IJSObjectReference hueSelectionBackgroundJs = await JS.InvokeAsync<IJSObjectReference>(
+             "import", "./_content/ColorPicker.View.Blazor/HueSelection/hueSelectionBackground.js");
+
+        await hueSelectionBackgroundJs.InvokeVoidAsync(
+            "initHueSelectionBackground",
+            _hueSelectionBackground
+        );
+    }
+
+    /// <summary>
+    /// Sets the hur selection marker.
+    /// </summary>
+    private async Task SetHueSelectionMarker()
+    {
+        _hueSelectionMarkJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/selectionMark.js");
+
+        await _hueSelectionMarkJs.InvokeVoidAsync(
+            "initSelectionMarker",
+            _hueSelectionMark,
+            ViewModel.Hsv.Hue / 360f,
+            _dotNetRef
+        );
+    }
+
+    /// <summary>
+    /// Update the hue component in main view model from change in UI.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    [JSInvokable]
+    public void OnValueChanged(float hue)
+    {
+        ViewModel.Hsv.Hue = ShareDataModel.LastHue = hue * 360f;
+    }
+
+    /// <summary>
+    /// Update the hue selection marker from main view model.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Hsv_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            if (e.PropertyName == nameof(HsvModel.Hue))
+            {
+                if (ShareDataModel.LastHue != ViewModel.Hsv.Hue)
+                {
+                    await _hueSelectionMarkJs.InvokeVoidAsync(
+                        "updateSelectionMarker",
+                        _hueSelectionMark,
+                        ViewModel.Hsv.Hue / 360f,
+                        _dotNetRef
+                    );
+                }
+            }
+        });
+    }
+
+    /// <summary>
+    /// Releases all resources used by this instance.
+    /// </summary>
+    public void Dispose()
+    {
+        ViewModel.Hsv.PropertyChanged -= Hsv_PropertyChanged;
+
+        _dotNetRef?.Dispose();
+    }
+}

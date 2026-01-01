@@ -1,0 +1,102 @@
+﻿@using Microsoft.JSInterop
+@using System.Drawing
+@using System.ComponentModel
+@using global::ColorPicker.View.Blazor.Models
+@implements IDisposable;
+
+<CascadingValue Name="ShareDataModel" Value="_shareDataModel">
+    <CascadingValue Name="MainViewModel" Value="_viewModel">
+        @if (Layout != null)
+        {
+            @Layout(CreateLayoutContext())
+        }
+        else
+        {
+            @DefaultLayout
+        }
+    </CascadingValue>
+</CascadingValue>
+
+@code {
+    @inject IJSRuntime JSRuntime
+
+    [Parameter]
+    public RenderFragment<LayoutContext>? Layout { get; set; }
+
+    [Parameter]
+    public Color SelectedColor { get; set; }
+
+    [Parameter]
+    public EventCallback<Color> SelectedColorChanged { get; set; }
+
+    private Color _lastSelectedColor;
+
+    private readonly ColorPickerViewModel _viewModel = new ColorPickerViewModel();
+    private readonly ShareDataModel _shareDataModel = new ShareDataModel();
+
+    /// <summary>
+    /// Created layout.
+    /// </summary>
+    /// <returns></returns>
+    private LayoutContext CreateLayoutContext() => new()
+    {
+        PART_ColorSelectionView = @<ColorPicker.View.Blazor.Components.ColorSelectionView />,
+        PART_HueSelectionView = @<ColorPicker.View.Blazor.Components.HueSelectionView />,
+        PART_AlphaSelectionView = @<ColorPicker.View.Blazor.Components.AlphaSelectionView />,
+        PART_SelectedColorView = @<ColorPicker.View.Blazor.Components.SelectedColorView />
+    };
+
+    /// <summary>
+    /// Default layout.
+    /// </summary>
+    private RenderFragment DefaultLayout => @<div style="height:400px;width:600px">
+        <div style="height:calc(100% - 108px);width:100%"><ColorPicker.View.Blazor.Components.ColorSelectionView /></div>
+        <div style="height:26px; margin-top: 10px"><ColorPicker.View.Blazor.Components.HueSelectionView /></div>
+        <div style="height:26px; margin-top: 10px"><ColorPicker.View.Blazor.Components.AlphaSelectionView /></div>
+        <div style="height:26px; margin-top: 10px"><ColorPicker.View.Blazor.Components.SelectedColorView /></div>
+    </div>;
+
+    /// <summary>
+    /// Initializes a new instance of the ColorPicker class.
+    /// </summary>
+    public ColorPicker()
+    {
+        _viewModel.Hex.PropertyChanged += Hex_PropertyChanged;
+    }
+
+    /// <summary>
+    /// Method invoked when the component has received parameters from its parent in the render tree, and the incoming values have been assigned to properties.
+    /// </summary>
+    protected override void OnParametersSet()
+    {
+        if (!_lastSelectedColor.Equals(SelectedColor))
+        {
+            _lastSelectedColor = SelectedColor;
+            _viewModel.SelectColor(SelectedColor.R, SelectedColor.G, SelectedColor.B, SelectedColor.A);
+        }
+    }
+
+    /// <summary>
+    /// Update the selected color from change in UI.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Hex_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            Color newColor = ColorTranslator.FromHtml(_viewModel.Hex.Hex);
+
+            SelectedColor = newColor;
+            await SelectedColorChanged.InvokeAsync(newColor);
+        });
+    }
+
+    /// <summary>
+    /// Releases all resources used by this instance.
+    /// </summary>
+    public void Dispose()
+    {
+        _viewModel.Hex.PropertyChanged -= Hex_PropertyChanged;
+    }
+}

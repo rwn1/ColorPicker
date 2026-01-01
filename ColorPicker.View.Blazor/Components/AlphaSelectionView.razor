@@ -1,0 +1,165 @@
+﻿@using Microsoft.JSInterop
+@using System.ComponentModel
+@using global::ColorPicker.View.Blazor.Models
+@implements IDisposable;
+
+<style>
+    .alpha-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .alpha-container canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        inset: 0;
+    }
+</style>
+
+<div class="alpha-container">
+    <canvas @ref="_squareBackground"></canvas>
+    <canvas @ref="_alphaSelectionForeground"></canvas>
+    <canvas @ref="_alphaSelectionMark"></canvas>
+</div>
+
+@code {
+
+    private ElementReference _squareBackground;
+    private ElementReference _alphaSelectionForeground;
+    private ElementReference _alphaSelectionMark;
+
+    private IJSObjectReference _alphaSelectionForegroundJs = default!;
+    private IJSObjectReference _alphaSelectionMarkJs = default!;
+
+    private DotNetObjectReference<AlphaSelectionView>? _dotNetRef;
+
+    [CascadingParameter(Name = "MainViewModel")]
+    internal ColorPickerViewModel ViewModel { get; set; } = default!;
+
+    [CascadingParameter(Name = "ShareDataModel")]
+    internal ShareDataModel ShareDataModel { get; set; } = default!;
+
+    [Inject] IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// Method invoked after each time the component has been rendered interactively and the UI has finished updating.
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        _dotNetRef = DotNetObjectReference.Create(this);
+
+        await SetSquareBackground();
+        await SetAlphaSelectionForeground();
+        await SetAlphaSelectionMarker();
+
+        ViewModel.Alpha.PropertyChanged += Alpha_PropertyChanged;
+        ViewModel.Hex.PropertyChanged += Hex_PropertyChanged;
+    }
+
+    /// <summary>
+    /// Sets the square background.
+    /// </summary>
+    private async Task SetSquareBackground()
+    {
+        IJSObjectReference squareBackgroundJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/squareBackground.js");
+
+        await squareBackgroundJs.InvokeVoidAsync(
+            "initSquareBackground",
+            _squareBackground
+        );
+    }
+
+    /// <summary>
+    /// Sets the alpha selection foreground.
+    /// </summary>
+    private async Task SetAlphaSelectionForeground()
+    {
+        _alphaSelectionForegroundJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/AlphaSelection/alphaSelectionForeground.js");
+
+        await _alphaSelectionForegroundJs.InvokeVoidAsync(
+            "initAlphaSelectionForeground",
+            _alphaSelectionForeground,
+            ViewModel.Hex.Hex
+        );
+    }
+
+    /// <summary>
+    /// Sets the alpha selection marker.
+    /// </summary>
+    private async Task SetAlphaSelectionMarker()
+    {
+        _alphaSelectionMarkJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/selectionMark.js");
+
+        await _alphaSelectionMarkJs.InvokeVoidAsync(
+            "initSelectionMarker",
+            _alphaSelectionMark,
+            (1 - ViewModel.Alpha.Alpha),
+            _dotNetRef
+        );
+    }
+
+    /// <summary>
+    /// Update the alpha component in main view model from change in UI.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    [JSInvokable]
+    public void OnValueChanged(float alpha)
+    {
+        ViewModel.Alpha.Alpha = ShareDataModel.LastAlpha = (1 - alpha);
+    }
+
+    /// <summary>
+    /// Update the alpha selection marker from main view model.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Alpha_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            await _alphaSelectionMarkJs.InvokeVoidAsync(
+                "updateSelectionMarker",
+                _alphaSelectionMark,
+                (1 - ViewModel.Alpha.Alpha),
+                _dotNetRef
+            );
+        });
+    }
+
+    /// <summary>
+    /// Update the alpha component color from main view model.
+    /// </summary>
+    private void Hex_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            await _alphaSelectionForegroundJs.InvokeVoidAsync(
+                "updateAlphaColor",
+                _alphaSelectionForeground,
+                ViewModel.Hex.Hex,
+                _dotNetRef
+            );
+        });
+    }
+
+    /// <summary>
+    /// Releases all resources used by this instance.
+    /// </summary>
+    public void Dispose()
+    {
+        ViewModel.Alpha.PropertyChanged -= Alpha_PropertyChanged;
+        ViewModel.Hex.PropertyChanged -= Hex_PropertyChanged;
+
+        _dotNetRef?.Dispose();
+    }
+}

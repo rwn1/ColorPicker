@@ -1,0 +1,108 @@
+﻿@using Microsoft.JSInterop
+@using global::ColorPicker.View.Blazor.Models
+@implements IDisposable;
+
+<style>
+    .selectedColor-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .selectedColor-container canvas {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        inset: 0;
+    }
+</style>
+
+<div class="selectedColor-container">
+    <canvas @ref="_squareBackground"></canvas>
+    <canvas @ref="_selectedColorForeground"></canvas>
+</div>
+
+@code {
+
+    private ElementReference _squareBackground;
+    private ElementReference _selectedColorForeground;
+
+    private IJSObjectReference _selectedColorForegroundJs = default!;
+
+    [CascadingParameter(Name = "MainViewModel")]
+    internal ColorPickerViewModel ViewModel { get; set; } = default!;
+
+    [CascadingParameter(Name = "ShareDataModel")]
+    internal ShareDataModel ShareDataModel { get; set; } = default!;
+
+    [Inject] IJSRuntime JS { get; set; } = default!;
+
+    /// <summary>
+    /// Method invoked after each time the component has been rendered interactively and the UI has finished updating.
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        await SetSquareBackground();
+        await SetSelectedColorForeground();
+
+        ViewModel.Hex.PropertyChanged += Hex_PropertyChanged;
+    }
+
+    /// <summary>
+    /// Sets the square background.
+    /// </summary>
+    private async Task SetSquareBackground()
+    {
+        IJSObjectReference squareBackgroundJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/squareBackground.js");
+
+        await squareBackgroundJs.InvokeVoidAsync(
+            "initSquareBackground",
+            _squareBackground
+        );
+    }
+
+    /// <summary>
+    /// Sets the selected color foreground.
+    /// </summary>
+    private async Task SetSelectedColorForeground()
+    {
+        _selectedColorForegroundJs = await JS.InvokeAsync<IJSObjectReference>(
+            "import", "./_content/ColorPicker.View.Blazor/SelectedColor/selectedColorForeground.js");
+
+        await _selectedColorForegroundJs.InvokeVoidAsync(
+            "initSelectedColorForeground",
+            _selectedColorForeground,
+            ViewModel.Hex.Hex
+        );
+    }
+
+    /// <summary>
+    /// Update the selected color foreground from main view model.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Hex_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            await _selectedColorForegroundJs.InvokeVoidAsync(
+                "updateSelectedColorForeground",
+                _selectedColorForeground,
+                ViewModel.Hex.Hex
+            );
+        });
+    }
+
+    /// <summary>
+    /// Releases all resources used by this instance.
+    /// </summary>
+    public void Dispose()
+    {
+        ViewModel.Hex.PropertyChanged -= Hex_PropertyChanged;
+    }
+}
