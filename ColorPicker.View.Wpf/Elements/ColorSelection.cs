@@ -24,11 +24,6 @@ namespace ColorPicker.View.Wpf.Elements
         private ColorSelectionMark _marker;
 
         /// <summary>
-        /// Cached pixel buffer for the rendered SV bitmap (BGRA order).
-        /// </summary>
-        private byte[] _pixelBuffer;
-
-        /// <summary>
         /// Initializes a new instance of the ColorSelection class.
         /// </summary>
         public ColorSelection(Canvas colorSelectionView, ShareDataModel shareDataModel, ColorPickerViewModel viewModel)
@@ -148,45 +143,10 @@ namespace ColorPicker.View.Wpf.Elements
 
             MoveColorSelectionMark(x, y);
 
-            byte[] rgb = GetRGBFromBitmap(point);
-            if (rgb == null || rgb.Length < 3) return;
+            double saturation = x / _colorSelectionView.ActualWidth;
+            double value = y / _colorSelectionView.ActualHeight;
 
-            // Convert pixel RGB to HSV
-            ColorConversions.RgbToHsv(rgb[2], rgb[1], rgb[0], out float h, out float s, out float v);
-
-            // Prevents unnecessary VM refresh cascades
-            _shareDataModel.LastHue = h;
-            _shareDataModel.LastSaturation = s;
-            _shareDataModel.LastValue = v;
-
-            // Apply to VM as selected color
-            _viewModel.SelectColor(rgb[2], rgb[1], rgb[0], _viewModel.Alpha.Alpha);
-        }
-
-        /// <summary>
-        /// Retrieves a 4-byte BGRA pixel from the cached buffer.
-        /// </summary>
-        private byte[] GetRGBFromBitmap(Point point)
-        {
-            if (_pixelBuffer == null) return new byte[4];
-
-            int x = (int)Math.Round(point.X);
-            int y = (int)Math.Round(point.Y);
-
-            if (x < 0 || y < 0 ||
-                x >= (int)_colorSelectionView.ActualWidth ||
-                y >= (int)_colorSelectionView.ActualHeight)
-                return null;
-
-            int index = (y * (int)_colorSelectionView.ActualWidth + x) * 4;
-
-            return new[]
-            {
-                _pixelBuffer[index + 0], // B
-                _pixelBuffer[index + 1], // G
-                _pixelBuffer[index + 2], // R
-                _pixelBuffer[index + 3], // A
-            };
+            _viewModel.SelectColor(_viewModel.Hsv.Hue, (float)saturation, (float)(1 - value), _viewModel.Alpha.Alpha);
         }
 
         /// <summary>
@@ -202,8 +162,7 @@ namespace ColorPicker.View.Wpf.Elements
 
             if (width <= 0 || height <= 0) return;
 
-            if (sizeChanged || _pixelBuffer == null)
-                _pixelBuffer = new byte[width * height * 4];
+            var pixelBuffer = new byte[width * height * 4];
 
             float hue = _viewModel.Hsv.Hue;
             int index = 0;
@@ -218,17 +177,17 @@ namespace ColorPicker.View.Wpf.Elements
 
                     ColorConversions.HsvToRgb(hue, s, v, out byte r, out byte g, out byte b);
 
-                    _pixelBuffer[index++] = b;
-                    _pixelBuffer[index++] = g;
-                    _pixelBuffer[index++] = r;
-                    _pixelBuffer[index++] = 255;
+                    pixelBuffer[index++] = b;
+                    pixelBuffer[index++] = g;
+                    pixelBuffer[index++] = r;
+                    pixelBuffer[index++] = 255;
                 }
             }
 
             var bmp = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgra32, null);
             _svImageBrush.ImageSource = bmp;
 
-            bmp.WritePixels(new Int32Rect(0, 0, width, height), _pixelBuffer, width * 4, 0);
+            bmp.WritePixels(new Int32Rect(0, 0, width, height), pixelBuffer, width * 4, 0);
             bmp.Freeze();
         }
 

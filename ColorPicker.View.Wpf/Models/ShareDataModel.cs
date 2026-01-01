@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace ColorPicker.View.Wpf.Models
+﻿namespace ColorPicker.View.Wpf.Models
 {
     /// <summary>
     /// An object representing rendered data.

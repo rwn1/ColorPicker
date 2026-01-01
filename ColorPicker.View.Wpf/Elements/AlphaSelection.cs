@@ -43,6 +43,7 @@ namespace ColorPicker.View.Wpf.Elements
             _alphaSelectionView.PreviewMouseLeftButtonUp += OnMouseUp;
             _alphaSelectionView.MouseMove += OnMouseMove;
             _alphaSelectionView.SizeChanged += OnSizeChanged;
+            _alphaSelectionView.Loaded += OnLoaded;
         }
 
         /// <summary>
@@ -120,6 +121,18 @@ namespace ColorPicker.View.Wpf.Elements
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             MoveAlphaMarker(_viewModel.Alpha.Alpha);
+        }
+
+        /// <summary>
+        /// Occurs when the element is laid out, rendered, and ready for interaction.
+        /// </summary>
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            // Default value
+            Brush selectedBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(_viewModel.Hex.Hex));
+            selectedBrush.Freeze();
+
+            SetSelectedColor(selectedBrush);
         }
 
         /// <summary>
@@ -282,6 +295,7 @@ namespace ColorPicker.View.Wpf.Elements
             _alphaSelectionView.PreviewMouseLeftButtonUp -= OnMouseUp;
             _alphaSelectionView.MouseMove -= OnMouseMove;
             _alphaSelectionView.SizeChanged -= OnSizeChanged;
+            _alphaSelectionView.Loaded -= OnLoaded;
 
             _marker.Loaded -= OnMarkerLoaded;
         }
