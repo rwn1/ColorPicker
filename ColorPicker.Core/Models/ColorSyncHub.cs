@@ -183,6 +183,9 @@ public class ColorSyncHub: ObservableObject
     /// <param name="alpha">Alpha component.</param>
     internal void SetColor(byte r, byte g, byte b, float alpha)
     {
+        if (Rgb.Red == r && Rgb.Green == g && Rgb.Blue == b && Alpha.Alpha == alpha)
+            return;
+
         if (IsSyncing) return;
         IsSyncing = true;
 
@@ -205,6 +208,9 @@ public class ColorSyncHub: ObservableObject
     /// <param name="alpha">Alpha component.</param>
     internal void SetColor(float h, float s, float v, float alpha)
     {
+        if (Hsv.Hue == h && Hsv.Saturation == s && Hsv.Value == v && Alpha.Alpha == alpha)
+            return;
+
         if (IsSyncing) return;
         IsSyncing = true;
 

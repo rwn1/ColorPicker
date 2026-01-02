@@ -97,7 +97,6 @@ public class ColorPickerViewModel : ObservableObject
     public void SelectColor(byte r, byte g, byte b, float alpha = 1.0f)
     {
         _hub.SetColor(r, g, b, alpha);
-        NotifyPropertyChanged(nameof(Alpha));
     }
 
     /// <summary>
@@ -110,6 +109,5 @@ public class ColorPickerViewModel : ObservableObject
     public void SelectColor(float hue, float saturation, float value, float alpha = 1.0f)
     {
         _hub.SetColor(hue, saturation, value, alpha);
-        NotifyPropertyChanged(nameof(Alpha));
     }
 }
