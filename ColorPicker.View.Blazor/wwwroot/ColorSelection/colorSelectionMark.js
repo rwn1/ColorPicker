@@ -110,11 +110,11 @@ function updateFromPointer(e, canvas) {
     if (!state) return;
 
     state.s = x;
-    state.v = y;
+    state.v = 1 - y;
 
     redrawOnly(canvas);
 
-    state.dotNetRef?.invokeMethodAsync("OnValueChanged", state.s, (1 - state.v));
+    state.dotNetRef?.invokeMethodAsync("OnValueChanged", state.s, state.v);
 }
 
 /* ============================
@@ -133,7 +133,7 @@ function drawMarker(ctx, width, height, state) {
     ctx.clearRect(0, 0, width, height);
 
     const x = state.s * width;
-    const y = state.v * height;
+    const y = (1 - state.v) * height;
 
     const radius = 3;
 

@@ -1,8 +1,69 @@
-﻿@using Microsoft.JSInterop
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
 @using System.Drawing
 @using System.ComponentModel
+@using System.Globalization
+@using global::ColorPicker.Core.Models
+@using global::ColorPicker.View.Blazor.Interfaces
 @using global::ColorPicker.View.Blazor.Models
-@implements IDisposable;
+@using Microsoft.AspNetCore.Components.Forms
+
+@if (Layout is null)
+{
+    <style>
+        .color-picker-layout {
+            display: grid;
+            grid-template-columns: auto 400px;
+            grid-template-rows: minmax(0, 1fr) auto;
+            height: 100vh;
+            max-height: 600px;
+        }
+
+        .colorSelection-area {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .controls {
+            grid-column: 2;
+            grid-row: 1;
+            margin-left: 8px;
+        }
+
+        .group {
+            padding: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 30px 70px 120px;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .hex-row {
+            display: grid;
+            grid-template-columns: 35px 100px;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .bottom-bar {
+            margin-top: 6px;
+            grid-column: 1;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-height: 100px;
+        }
+
+    </style>
+}
 
 <CascadingValue Name="ShareDataModel" Value="_shareDataModel">
     <CascadingValue Name="MainViewModel" Value="_viewModel">
@@ -20,6 +81,11 @@
 @code {
     @inject IJSRuntime JSRuntime
 
+    private readonly ColorPickerViewModel _viewModel = new ColorPickerViewModel();
+    private readonly ShareDataModel _shareDataModel = new ShareDataModel();
+
+    private Color _lastSelectedColor;
+
     [Parameter]
     public RenderFragment<LayoutContext>? Layout { get; set; }
 
@@ -28,11 +94,6 @@
 
     [Parameter]
     public EventCallback<Color> SelectedColorChanged { get; set; }
-
-    private Color _lastSelectedColor;
-
-    private readonly ColorPickerViewModel _viewModel = new ColorPickerViewModel();
-    private readonly ShareDataModel _shareDataModel = new ShareDataModel();
 
     /// <summary>
     /// Created layout.
@@ -43,18 +104,188 @@
         PART_ColorSelectionView = @<ColorPicker.View.Blazor.Components.ColorSelectionView />,
         PART_HueSelectionView = @<ColorPicker.View.Blazor.Components.HueSelectionView />,
         PART_AlphaSelectionView = @<ColorPicker.View.Blazor.Components.AlphaSelectionView />,
-        PART_SelectedColorView = @<ColorPicker.View.Blazor.Components.SelectedColorView />
+        PART_SelectedColorView = @<ColorPicker.View.Blazor.Components.SelectedColorView />,        
+        
+        // HEX
+        PART_HexTextBox = @<input @bind=@_viewModel.Hex.Hex @oninput="((args) => _viewModel.Hex.Hex = args.Value?.ToString())" />,
+        
+        // RGB
+        PART_RedTextBox = @TextBox(_red),
+        PART_RedSlider = @Slider(() => _red.Value, v => _red.Value = v, 0, 255),
+        PART_GreenTextBox = @TextBox(_green),
+        PART_GreenSlider = @Slider(() => _green.Value, v => _green.Value = v, 0, 255),
+        PART_BlueTextBox = @TextBox(_blue),
+        PART_BlueSlider = @Slider(() => _blue.Value, v => _blue.Value = v, 0, 255),
+        
+        // Alpha
+        PART_AlphaTextBox = @TextBox(_alpha),
+        PART_AlphaSlider = @Slider(() => _alpha.Value, v => _alpha.Value = v, 0, 100),
+
+        // HSV
+        PART_HueTextBox = @TextBox(_hue),
+        PART_HueSlider = @Slider(() => _hue.Value, v => _hue.Value = v, 0, 360),
+        PART_SaturationTextBox = @TextBox(_saturation),
+        PART_SaturationSlider = @Slider(() => _saturation.Value, v => _saturation.Value = v, 0, 100),
+        PART_ValueTextBox = @TextBox(_value),
+        PART_ValueSlider = @Slider(() => _value.Value, v => _value.Value = v, 0, 100),
+    
+        // HSL
+        PART_HslHueTextBox = @TextBox(_hslHue),
+        PART_HslHueSlider = @Slider(() => _hslHue.Value, v => _hslHue.Value = v, 0, 360),
+        PART_HslSaturationTextBox = @TextBox(_hslSaturation),
+        PART_HslSaturationSlider = @Slider(() => _hslSaturation.Value, v => _hslSaturation.Value = v, 0, 100),
+        PART_HslLightnessTextBox = @TextBox(_hslLightness),
+        PART_HslLightnessSlider = @Slider(() => _hslLightness.Value, v => _hslLightness.Value = v, 0, 100),
+
+        // CMYK
+        PART_CyanTextBox = @TextBox(_cyan),
+        PART_CyanSlider = @Slider(() => _cyan.Value, v => _cyan.Value = v, 0, 100),
+        PART_MagentaTextBox = @TextBox(_magenta),
+        PART_MagentaSlider = @Slider(() => _magenta.Value, v => _magenta.Value = v, 0, 100),
+        PART_YellowTextBox = @TextBox(_yellow),
+        PART_YellowSlider = @Slider(() => _yellow.Value, v => _yellow.Value = v, 0, 100),
+        PART_KeyTextBox = @TextBox(_key),
+        PART_KeySlider = @Slider(() => _key.Value, v => _key.Value = v, 0, 100)
     };
 
-    /// <summary>
-    /// Default layout.
-    /// </summary>
-    private RenderFragment DefaultLayout => @<div style="height:400px;width:600px">
-        <div style="height:calc(100% - 108px);width:100%"><ColorPicker.View.Blazor.Components.ColorSelectionView /></div>
-        <div style="height:26px; margin-top: 10px"><ColorPicker.View.Blazor.Components.HueSelectionView /></div>
-        <div style="height:26px; margin-top: 10px"><ColorPicker.View.Blazor.Components.AlphaSelectionView /></div>
-        <div style="height:26px; margin-top: 10px"><ColorPicker.View.Blazor.Components.SelectedColorView /></div>
-    </div>;
+    private RenderFragment DefaultLayout => 
+    @<div class="color-picker-layout">
+        <div class="colorSelection-area">
+            <ColorPicker.View.Blazor.Components.ColorSelectionView />
+        </div>
+    
+        <div class="controls">
+            <!--HEX-->
+            <div class="hex-row">
+                <label>HEX</label>
+                <input @bind=@_viewModel.Hex.Hex @oninput="((args) => _viewModel.Hex.Hex = args.Value?.ToString())"/>
+            </div>
+
+            <!--RGB-->
+            <div class="group">
+                <!--Red-->
+                <div class="row">
+                    <label>R</label>
+                    @TextBox(_red)
+                    @Slider(() => _red.Value, v => _red.Value = v, 0, 255)
+                </div>
+                <!--Green-->
+                <div class="row">
+                    <label>G</label>
+                    @TextBox(_green)
+                    @Slider(() => _green.Value, v => _green.Value = v, 0, 255)
+                </div>
+                <!--Blue-->
+                <div class="row">
+                    <label>B</label>
+                    @TextBox(_blue)
+                    @Slider(() => _blue.Value, v => _blue.Value = v, 0, 255)
+                </div>
+            </div>
+
+            <!--Alpha-->
+            <div class="group">
+                <div class="row">
+                    <label>A</label>
+                    @TextBox(_alpha)
+                    @Slider(() => _alpha.Value, v => _alpha.Value = v, 0, 100)
+                </div>
+            </div>
+
+            <!--HSV-->
+            <div class="group">
+                <div class="row">
+                    <label>H</label>
+                    @TextBox(_hue)
+                    @Slider(() => _hue.Value, v => _hue.Value = v, 0, 100)
+                </div>
+                <div class="row">
+                    <label>S</label>
+                    @TextBox(_saturation)
+                    @Slider(() => _saturation.Value, v => _saturation.Value = v, 0, 100)
+                </div>
+                <div class="row">
+                    <label>V</label>
+                    @TextBox(_value)
+                    @Slider(() => _value.Value, v => _value.Value = v, 0, 100)
+                </div>
+            </div>
+
+            <!--HSL-->
+            <div class="group">
+                <div class="row">
+                    <label>H</label>
+                    @TextBox(_hslHue)
+                    @Slider(() => _hslHue.Value, v => _hslHue.Value = v, 0, 100)
+                </div>
+                <div class="row">
+                    <label>S</label>
+                    @TextBox(_hslSaturation)
+                    @Slider(() => _hslSaturation.Value, v => _hslSaturation.Value = v, 0, 100)
+                </div>
+                <div class="row">
+                    <label>L</label>
+                    @TextBox(_hslLightness)
+                    @Slider(() => _hslLightness.Value, v => _hslLightness.Value = v, 0, 100)
+                </div>
+            </div>
+
+            <!--CMYK-->
+            <div class="group">
+                <div class="row">
+                    <label>C</label>
+                    @TextBox(_cyan)
+                    @Slider(() => _cyan.Value, v => _cyan.Value = v, 0, 100)
+                </div>
+                <div class="row">
+                    <label>M</label>
+                    @TextBox(_magenta)
+                    @Slider(() => _magenta.Value, v => _magenta.Value = v, 0, 100)
+                </div>
+                <div class="row">
+                    <label>Y</label>
+                    @TextBox(_yellow)
+                    @Slider(() => _yellow.Value, v => _yellow.Value = v, 0, 100)
+                </div>
+                <div class="row">
+                    <label>K</label>
+                    @TextBox(_key)
+                    @Slider(() => _key.Value, v => _key.Value = v, 0, 100)
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-bar">
+            <ColorPicker.View.Blazor.Components.HueSelectionView />            
+            <ColorPicker.View.Blazor.Components.AlphaSelectionView />            
+            <ColorPicker.View.Blazor.Components.SelectedColorView />
+        </div>
+    </div>
+    ;
+
+    // RGB
+    private ByteBinding<RgbModel> _red = default!;
+    private ByteBinding<RgbModel> _green = default!;
+    private ByteBinding<RgbModel> _blue = default!;
+
+    // Alpha
+    private PercentBinding<AlphaModel> _alpha = default!;
+
+    // HSV
+    private DegreeBinding<HsvModel> _hue = default!;
+    private PercentBinding<HsvModel> _saturation = default!;
+    private PercentBinding<HsvModel> _value = default!;
+
+    // HSL
+    private DegreeBinding<HslModel> _hslHue = default!;
+    private PercentBinding<HslModel> _hslSaturation = default!;
+    private PercentBinding<HslModel> _hslLightness = default!;
+
+    // CMYK
+    private PercentBinding<CmykModel> _cyan = default!;
+    private PercentBinding<CmykModel> _magenta = default!;
+    private PercentBinding<CmykModel> _yellow = default!;
+    private PercentBinding<CmykModel> _key = default!;
 
     /// <summary>
     /// Initializes a new instance of the ColorPicker class.
@@ -72,7 +303,7 @@
         if (!_lastSelectedColor.Equals(SelectedColor))
         {
             _lastSelectedColor = SelectedColor;
-            _viewModel.SelectColor(SelectedColor.R, SelectedColor.G, SelectedColor.B, SelectedColor.A);
+            _viewModel.SelectColor(SelectedColor.R, SelectedColor.G, SelectedColor.B, SelectedColor.A / 255f);
         }
     }
 
@@ -93,10 +324,168 @@
     }
 
     /// <summary>
+    /// Method invoked after each time the component has been rendered interactively and the UI has finished updating.
+    /// </summary>
+    /// <returns></returns>
+    protected override void OnInitialized()
+    {
+        SetRgb();
+        SetAlpha();
+        SetHsv();
+        SetHsl();
+        SetCmyk();
+    }
+
+    /// <summary>
+    /// Sets the RGB components.
+    /// </summary>
+    private void SetRgb()
+    {
+        _red = new ByteBinding<RgbModel>(
+            new BytePropertyBinding<RgbModel>(_viewModel.Rgb, x => x.Red)
+        );
+        _green = new ByteBinding<RgbModel>(
+            new BytePropertyBinding<RgbModel>(_viewModel.Rgb, x => x.Green)
+        );
+        _blue = new ByteBinding<RgbModel>(
+            new BytePropertyBinding<RgbModel>(_viewModel.Rgb, x => x.Blue)
+        );
+    }
+
+    /// <summary>
+    /// Sets the Alpha component.
+    /// </summary>
+    private void SetAlpha()
+    {
+        _alpha = new PercentBinding<AlphaModel>(
+            new FloatPropertyBinding<AlphaModel>(_viewModel.Alpha, x => x.Alpha)
+        );
+    }
+
+    /// <summary>
+    /// Sets the HSV components.
+    /// </summary>
+    private void SetHsv()
+    {
+        _hue = new DegreeBinding<HsvModel>(
+            new FloatPropertyBinding<HsvModel>(_viewModel.Hsv, x => x.Hue)
+        );
+        _saturation = new PercentBinding<HsvModel>(
+            new FloatPropertyBinding<HsvModel>(_viewModel.Hsv, x => x.Saturation)
+        );
+        _value = new PercentBinding<HsvModel>(
+            new FloatPropertyBinding<HsvModel>(_viewModel.Hsv, x => x.Value)
+        );
+    }
+
+    /// <summary>
+    /// Sets the HSL components.
+    /// </summary>
+    private void SetHsl()
+    {
+        _hslHue = new DegreeBinding<HslModel>(
+            new FloatPropertyBinding<HslModel>(_viewModel.Hsl, x => x.Hue)
+        );
+        _hslSaturation = new PercentBinding<HslModel>(
+            new FloatPropertyBinding<HslModel>(_viewModel.Hsl, x => x.Saturation)
+        );
+        _hslLightness = new PercentBinding<HslModel>(
+            new FloatPropertyBinding<HslModel>(_viewModel.Hsl, x => x.Lightness)
+        );
+    }
+
+    /// <summary>
+    /// Sets the CMYK components.
+    /// </summary>
+    private void SetCmyk()
+    {
+        _cyan = new PercentBinding<CmykModel>(
+            new FloatPropertyBinding<CmykModel>(_viewModel.Cmyk, x => x.Cyan)
+        );
+        _magenta = new PercentBinding<CmykModel>(
+            new FloatPropertyBinding<CmykModel>(_viewModel.Cmyk, x => x.Magenta)
+        );
+        _yellow = new PercentBinding<CmykModel>(
+            new FloatPropertyBinding<CmykModel>(_viewModel.Cmyk, x => x.Yellow)
+        );
+        _key = new PercentBinding<CmykModel>(
+            new FloatPropertyBinding<CmykModel>(_viewModel.Cmyk, x => x.Key)
+        );
+    }
+
+    /// <summary>
+    /// Creates the text box input.
+    /// </summary>
+    /// <param name="model">Data model.</param>
+    /// <returns>The text box input.</returns>
+    private RenderFragment TextBox(IValueBinding model) => builder =>
+    {
+        builder.OpenElement(0, "input");
+        builder.AddAttribute(1, "type", "text");
+        builder.AddAttribute(2, "value", model.Text);
+
+        builder.AddAttribute(3, "onfocus",
+            EventCallback.Factory.Create(this, model.OnFocus));
+
+        builder.AddAttribute(4, "oninput",
+            EventCallback.Factory.Create<ChangeEventArgs>(
+                this, e => model.OnInput(e.Value?.ToString())));
+
+        builder.AddAttribute(5, "onblur",
+            EventCallback.Factory.Create(this, model.OnBlur));
+
+        builder.CloseElement();
+    };
+
+    /// <summary>
+    /// Creates the range input.
+    /// </summary>
+    /// <param name="getValue">Getter for the value.</param>
+    /// <param name="setValue">Setter for the value.</param>
+    /// <param name="min">Min value.</param>
+    /// <param name="max">Max value.</param>
+    /// <returns>The range input.</returns>
+    private RenderFragment Slider(Func<int> getValue, Action<int> setValue, int min, int max)
+    {
+        return builder =>
+        {
+            builder.OpenElement(0, "input");
+            builder.AddAttribute(1, "type", "range");
+            builder.AddAttribute(2, "min", min);
+            builder.AddAttribute(3, "max", max);
+            builder.AddAttribute(4, "step", 1);
+            builder.AddAttribute(5, "value", getValue());
+
+            builder.AddAttribute(6, "oninput",
+                EventCallback.Factory.Create<ChangeEventArgs>(
+                    this, e => setValue(int.Parse(e.Value!.ToString()!))));
+
+            builder.CloseElement();
+        };
+    }
+
+    /// <summary>
     /// Releases all resources used by this instance.
     /// </summary>
     public void Dispose()
     {
-        _viewModel.Hex.PropertyChanged -= Hex_PropertyChanged;
+        _red?.Dispose();
+        _green?.Dispose();
+        _blue?.Dispose();
+
+        _alpha?.Dispose();
+
+        _hue?.Dispose();
+        _saturation?.Dispose();
+        _value?.Dispose();
+
+        _hslHue?.Dispose();
+        _hslSaturation?.Dispose();
+        _hslLightness?.Dispose();
+
+        _cyan?.Dispose();
+        _magenta?.Dispose();
+        _yellow?.Dispose();
+        _key?.Dispose();
     }
 }
