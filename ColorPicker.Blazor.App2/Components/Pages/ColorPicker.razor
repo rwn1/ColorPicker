@@ -1,0 +1,54 @@
+﻿@page "/colorPicker"
+@using global::ColorPicker.Blazor.App2.ViewModels
+@rendermode InteractiveServer
+
+<style>
+    .color-picker-layout {
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+        width: 600px;
+    }
+
+    .color-selection {
+        flex: 1 1 0;
+        min-height: 0;
+    }
+
+    .color-selection-inner {
+        height: 100%;
+        width: 100%;
+    }
+
+    .color-row {
+        height: 26px;
+        flex: 0 0 26px;
+        gap: 6px;
+        margin-top: 6px;
+    }
+</style>
+
+<ColorPicker.View.Blazor.ColorPicker Layout="@MyLayout" @bind-SelectedColor="_mainViewModel.SelectedColor" />
+
+@code {
+    private RenderFragment<LayoutContext> MyLayout => ctx =>
+    @<div class="color-picker-layout">
+        <div class="color-selection">
+            @ctx.PART_ColorSelectionView
+        </div>
+
+        <div class="color-row">
+            @ctx.PART_HueSelectionView
+        </div>
+
+        <div class="color-row">
+            @ctx.PART_AlphaSelectionView
+        </div>
+
+        <div class="color-row">
+            @ctx.PART_SelectedColorView
+        </div>
+    </div>;
+
+    private MainViewModel _mainViewModel = new MainViewModel();
+}

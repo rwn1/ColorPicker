@@ -1,0 +1,169 @@
+﻿@page "/colorPicker"
+@using global::ColorPicker.Blazor.App3.ViewModels
+@rendermode InteractiveServer
+
+<style>
+    .color-picker-layout {
+        display: grid;
+        grid-template-columns: 200px auto;
+        grid-template-rows: auto 26px 26px 50px;
+        height: 100vh;
+        max-height: 600px;
+    }
+
+    .selected-color{
+        margin-right: 4px;
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .color-selection{
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .hue-selection {
+        margin-top:  4px;
+        grid-column: 1 / span 2;
+        grid-row: 2;
+    }
+
+    .alpha-selection {
+        margin-top: 4px;
+        grid-column: 1 / span 2;
+        grid-row: 3;
+    }
+
+    .color-control {
+        margin-top: 18px;
+        grid-column: 1 / span 2;
+        grid-row: 4;
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 2fr 1.5fr 1.5fr;
+        gap: 12px;
+        justify-content: start;
+        width:100%;
+    }
+
+    .group {
+        position: relative;
+        border: 1px solid #cfd8dc;
+        border-radius: 6px;
+        padding: 14px 12px 10px;
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .row div {
+        padding: 0px !important;
+    }
+
+    .row input {
+        max-width: 50px !important;
+    }
+
+    .row--wide input {
+        max-width: 100px !important;
+    }
+
+    .row > div {
+        width: auto;
+        flex: 0 0 auto;
+    }
+
+    .label {
+        position: absolute;
+        top: -0.6em;
+        left: 10px;
+        background: white;
+        padding: 0 6px;
+        font-size: 0.75rem;
+        color: #666;
+    }
+</style>
+
+<ColorPicker.View.Blazor.ColorPicker Layout="@MyLayout" @bind-SelectedColor="_mainViewModel.SelectedColor" />
+
+@code {
+    private RenderFragment<LayoutContext> MyLayout => ctx =>
+    @<div class="color-picker-layout">
+
+        <!--Selected color-->
+        <div class="selected-color">
+            @ctx.PART_SelectedColorView
+        </div>
+
+        <!--Color selection-->
+        <div class="color-selection">
+            @ctx.PART_ColorSelectionView
+        </div>
+
+        <!--Hue-->
+        <div class="hue-selection">
+            @ctx.PART_HueSelectionView
+        </div>
+
+        <!--Alpha-->
+        <div class="alpha-selection">
+            @ctx.PART_AlphaSelectionView
+        </div>
+
+        <div class="color-control">
+            <!--Hex-->
+            <div class="group" style="grid-column: 1">
+                <span class="label">Hex</span>
+                <div class="row row--wide">
+                    <div>@ctx.PART_HexTextBox</div>
+                </div>
+            </div>
+
+            <!--RGB-->
+            <div class="group" style="grid-column: 2">
+                <span class="label">RGB</span>
+                <div class ="row">
+                    <div>@ctx.PART_RedTextBox</div>
+                    <div>@ctx.PART_GreenTextBox</div>
+                    <div>@ctx.PART_BlueTextBox</div>
+                </div>
+            </div>
+
+            <!--CMYK-->
+            <div class="group" style="grid-column: 3">
+                <span class="label">CMYK</span>
+                <div class="row">
+                    <div>@ctx.PART_CyanTextBox</div>
+                    <div>@ctx.PART_MagentaTextBox</div>
+                    <div>@ctx.PART_YellowTextBox</div>
+                    <div>@ctx.PART_KeyTextBox</div>
+                </div>
+            </div>
+
+            <!--HSV-->
+            <div class="group" style="grid-column: 4">
+                <span class="label">HSV</span>
+                <div class="row">
+                    <div>@ctx.PART_HueTextBox</div>
+                    <div>@ctx.PART_SaturationTextBox</div>
+                    <div>@ctx.PART_ValueTextBox</div>
+                </div>
+            </div>
+
+            <!--HSL-->
+            <div class="group" style="grid-column: 5">
+                <span class="label">HSL</span>
+                <div class="row">
+                    <div>@ctx.PART_HslHueTextBox</div>
+                    <div>@ctx.PART_HslSaturationTextBox</div>
+                    <div>@ctx.PART_HslLightnessTextBox</div>
+                </div>
+            </div>
+        </div>
+
+    </div>;
+
+    private MainViewModel _mainViewModel = new MainViewModel();
+}

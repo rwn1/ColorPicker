@@ -1,0 +1,9 @@
+﻿@page "/colorPicker"
+@using global::ColorPicker.Blazor.App1.ViewModels
+@rendermode InteractiveServer
+
+<ColorPicker.View.Blazor.ColorPicker @bind-SelectedColor="_mainViewModel.SelectedColor" />
+
+@code {
+    private MainViewModel _mainViewModel = new MainViewModel();
+}
