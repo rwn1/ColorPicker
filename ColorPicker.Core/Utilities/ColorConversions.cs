@@ -208,6 +208,32 @@ namespace ColorPicker.Core.Utilities
         }
 
         /// <summary>
+        /// Color conversions from CMYK to RGB.
+        /// </summary>
+        /// <param name="c">Cyan component (0–1).</param>
+        /// <param name="m">Magenta component (0–1).</param>
+        /// <param name="y">Yellow component (0–1).</param>
+        /// <param name="k">Key (black) component (0–1).</param>
+        /// <param name="r">Red component.</param>
+        /// <param name="g">Green component.</param>
+        /// <param name="b">Blue component.</param>
+        public static void CmykToRgb(float c, float m, float y, float k, out byte r, out byte g, out byte b)
+        {
+            c = Clamp01(c);
+            m = Clamp01(m);
+            y = Clamp01(y);
+            k = Clamp01(k);
+
+            float rd = (1.0f - c) * (1.0f - k);
+            float gd = (1.0f - m) * (1.0f - k);
+            float bd = (1.0f - y) * (1.0f - k);
+
+            r = (byte)Math.Round(rd * 255.0f);
+            g = (byte)Math.Round(gd * 255.0f);
+            b = (byte)Math.Round(bd * 255.0f);
+        }
+
+        /// <summary>
         /// Color convertions from HSV to HSL.
         /// </summary>
         /// <param name="h">Hue component.</param>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<PackageId>ColorPicker.Core</PackageId>
-	<Version>1.0.3</Version>
+	<Version>1.0.4</Version>
 	<Authors>rwn1</Authors>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<Description>ColorPicker.Core is a universal, multi-platform color-processing library that contains all the main logic, algorithms, and color conversion routines. It provides easy conversion between popular color formats including Hex, RGB, HSL, HSV, and CMYK.</Description>
