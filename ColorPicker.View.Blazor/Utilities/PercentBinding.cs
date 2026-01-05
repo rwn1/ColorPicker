@@ -61,6 +61,12 @@ internal sealed class PercentBinding<T> : IValueBinding, IDisposable
     public void OnInput(string? text)
     {
         _text = text ?? "";
+
+        if (int.TryParse(_text, out var value))
+        {
+            value = Math.Clamp(value, 0, 100);
+            Value = value;
+        }
     }
 
     /// <summary>
@@ -73,11 +79,11 @@ internal sealed class PercentBinding<T> : IValueBinding, IDisposable
 
         _hasFocus = false;
 
-        if (int.TryParse(_text, out var value))
-        {
-            value = Math.Clamp(value, 0, 100);
-            Value = value;
-        }
+        //if (int.TryParse(_text, out var value))
+        //{
+        //    value = Math.Clamp(value, 0, 100);
+        //    Value = value;
+        //}
 
         SyncText();
     }
