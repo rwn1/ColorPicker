@@ -35,6 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorPicker.Blazor.App3", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorPicker.Blazor.App1", "ColorPicker.Blazor.App1\ColorPicker.Blazor.App1.csproj", "{E97C6EB8-9E13-48D8-BE70-559DDE0BD37F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorPicker.Blazor.Tests.bUnit", "ColorPicker.Blazor.Tests.bUnit\ColorPicker.Blazor.Tests.bUnit.csproj", "{9EDAE18E-7233-4A30-80AD-87B20F0593D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorPicker.Blazor.Tests.Playwright", "ColorPicker.Blazor.Tests.Playwright\ColorPicker.Blazor.Tests.Playwright.csproj", "{FA633329-9B7D-417C-A273-0A1938847E77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +99,14 @@ Global
 		{E97C6EB8-9E13-48D8-BE70-559DDE0BD37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E97C6EB8-9E13-48D8-BE70-559DDE0BD37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E97C6EB8-9E13-48D8-BE70-559DDE0BD37F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EDAE18E-7233-4A30-80AD-87B20F0593D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EDAE18E-7233-4A30-80AD-87B20F0593D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EDAE18E-7233-4A30-80AD-87B20F0593D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EDAE18E-7233-4A30-80AD-87B20F0593D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA633329-9B7D-417C-A273-0A1938847E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA633329-9B7D-417C-A273-0A1938847E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA633329-9B7D-417C-A273-0A1938847E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA633329-9B7D-417C-A273-0A1938847E77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +123,8 @@ Global
 		{A18EB0A0-5203-4A91-BAAE-2BF8ACEFB671} = {F3D667FA-1958-4A80-9035-2428EE30E525}
 		{458DC3EF-0691-454C-ABDD-07C5CF4391E3} = {F3D667FA-1958-4A80-9035-2428EE30E525}
 		{E97C6EB8-9E13-48D8-BE70-559DDE0BD37F} = {F3D667FA-1958-4A80-9035-2428EE30E525}
+		{9EDAE18E-7233-4A30-80AD-87B20F0593D5} = {F3D667FA-1958-4A80-9035-2428EE30E525}
+		{FA633329-9B7D-417C-A273-0A1938847E77} = {F3D667FA-1958-4A80-9035-2428EE30E525}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {062268FE-DB30-4855-9FBE-F35CA58F3F20}
