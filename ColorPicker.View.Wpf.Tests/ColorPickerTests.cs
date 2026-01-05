@@ -18,60 +18,56 @@ namespace ColorPicker.View.Wpf.Tests
         /// <summary>
         /// Values for testing the percentages TextBox controls.
         /// </summary>
-        private static IEnumerable<object[]> percentagesTextBoxValues =>
-            new List<object[]>
-            {
-                new object[] { "-100", "0", true },
-                new object[] { "-50", "0", true },
-                new object[] { "50", "50", true },
-                new object[] { "99.9999", "100", true },
-                new object[] { "100", "100", true },
-                new object[] { "150", "100", true },
-                new object[] { "1000", "100", true },
-                new object[] { "82.4", "82", true },
-                new object[] { "ABC", null, false }
-            };
+        private static IEnumerable<object[]> PercentagesTextBoxValues
+            => [
+                ["-100", "0", true],
+                ["-50", "0", true],
+                ["50", "50", true],
+                ["99.9999", "100", true],
+                ["100", "100", true],
+                ["150", "100", true],
+                ["1000", "100", true],
+                ["82.4", "82", true],
+                ["ABC", null, false]
+            ];
 
         /// <summary>
         /// Values for testing the percentages Slider controls.
         /// </summary>
-        private static IEnumerable<object[]> PercentagesSliderValues =>
-            new List<object[]>
-            {
-                new object[] { 0, "0%" },
-                new object[] { 50, "50%" },
-                new object[] { 99, "99%" },
-                new object[] { 100, "100%" },
-                new object[] { 82, "82%" }
-            };
+        private static IEnumerable<object[]> PercentagesSliderValues
+            => [
+                [0, "0%"],
+                [50, "50%"],
+                [99, "99%"],
+                [100, "100%"],
+                [82, "82%"]
+            ];
 
         /// <summary>
         /// Values for testing the degrees TextBox controls.
         /// </summary>
-        private static IEnumerable<object[]> DegreesTextBoxValues =>
-            new List<object[]>
-            {
-                new object[] { "-100", "0", true },
-                new object[] { "-0.5", "0", true },
-                new object[] { "0.5", "0", true },
-                new object[] { "0.999999", "1", true },
-                new object[] { "300", "300", true },
-                new object[] { "400", "360", true },
-                new object[] { "5000", "360", true },
-                new object[] { "ABC", null, false }
-            };
+        private static IEnumerable<object[]> DegreesTextBoxValues
+            => [
+                ["-100", "0", true],
+                ["-0.5", "0", true],
+                ["0.5", "0", true],
+                ["0.999999", "1", true],
+                ["300", "300", true],
+                ["400", "360", true],
+                ["5000", "360", true],
+                ["ABC", null, false]
+            ];
 
         /// <summary>
         /// Values for testing the degrees Slider controls.
         /// </summary>
-        private static IEnumerable<object[]> DegreesSliderValues =>
-            new List<object[]>
-            {
-                new object[] { 0, "0°" },
-                new object[] { 10, "10°" },
-                new object[] { 200, "200°" },
-                new object[] { 360, "360°" }
-            };
+        private static IEnumerable<object[]> DegreesSliderValues
+            => [
+                [0, "0°"],
+                [10, "10°"],
+                [200, "200°"],
+                [360, "360°"]
+            ];
 
         [ClassInitialize]
         public static void Setup(TestContext context)
@@ -93,7 +89,7 @@ namespace ColorPicker.View.Wpf.Tests
         /// <summary>
         /// Resets color input values.
         /// </summary>
-        private void ResetColorInputs()
+        private static void ResetColorInputs()
         {
             ResetTextBox("PART_HexTextBox", "#FF000000");
 
@@ -122,9 +118,9 @@ namespace ColorPicker.View.Wpf.Tests
         /// </summary>
         /// <param name="automationId">Identification of the TextBox.</param>
         /// <param name="value">Value to set.</param>
-        private void ResetTextBox(string automationId, string value)
+        private static void ResetTextBox(string automationId, string value)
         {
-            var textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(automationId))?.AsTextBox();
+            TextBox? textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(automationId))?.AsTextBox();
             if (textBox == null) return;
 
             if (textBox.Text != value)
@@ -164,7 +160,7 @@ namespace ColorPicker.View.Wpf.Tests
             {
                 string defaultValue = "#FF000000";
 
-                var hexTextBox = _window.FindFirstDescendant(cf => cf.ByAutomationId("PART_HexTextBox"))?.AsTextBox();
+                TextBox? hexTextBox = _window.FindFirstDescendant(cf => cf.ByAutomationId("PART_HexTextBox"))?.AsTextBox();
                 if (hexTextBox != null)
                 {
                     hexTextBox.Text = defaultValue;
@@ -201,13 +197,13 @@ namespace ColorPicker.View.Wpf.Tests
         {
             if (_window != null)
             {
-                var hexTextBox = _window.FindFirstDescendant(cf => cf.ByAutomationId("PART_HexTextBox"))?.AsTextBox();
+                TextBox? hexTextBox = _window.FindFirstDescendant(cf => cf.ByAutomationId("PART_HexTextBox"))?.AsTextBox();
                 if (hexTextBox != null)
                 {
                     hexTextBox.Text = input;
                     Keyboard.Press(VirtualKeyShort.TAB);
 
-                    var retryResult = Retry.WhileFalse(
+                    RetryResult<bool> retryResult = Retry.WhileFalse(
                             () => hexTextBox.Text == output,
                             timeout: TimeSpan.FromMilliseconds(5000)
                         );
@@ -224,28 +220,26 @@ namespace ColorPicker.View.Wpf.Tests
         /// <summary>
         /// Values for testing the RGB TextBox controls.
         /// </summary>
-        private static IEnumerable<object[]> RgbTextBoxValues =>
-            new List<object[]>
-            {
-                new object[] { "-100", false },
-                new object[] { "-0.5", false },
-                new object[] { "5", true },
-                new object[] { "50", true },
-                new object[] { "200", true },
-                new object[] { "300", false },
-                new object[] { "ABC", false }
-            };
+        private static IEnumerable<object[]> RgbTextBoxValues
+            => [
+                ["-100", false],
+                ["-0.5", false],
+                ["5", true],
+                ["50", true],
+                ["200", true],
+                ["300", false],
+                ["ABC", false]
+            ];
 
         /// <summary>
         /// Values for testing the RGB Slider controls.
         /// </summary>
-        private static IEnumerable<object[]> RgbSliderValues =>
-            new List<object[]>
-            {
-                new object[] { 50 },
-                new object[] { 100 },
-                new object[] { 255 }
-            };
+        private static IEnumerable<object[]> RgbSliderValues
+            => [
+                [50],
+                [100],
+                [255]
+            ];
 
         [DataTestMethod]
         [DynamicData(nameof(RgbTextBoxValues), DynamicDataSourceType.Property)]
@@ -296,11 +290,11 @@ namespace ColorPicker.View.Wpf.Tests
         /// <param name="isValid">Information about whether the input value is valid.</param>
         /// <param name="textBoxId">TextBox identifier.</param>
         /// <param name="sliderId">Slider identifier</param>
-        public void RgbTextBox_ValidateValue(string input, bool isValid, string textBoxId, string sliderId)
+        public static void RgbTextBox_ValidateValue(string input, bool isValid, string textBoxId, string sliderId)
         {
             if (_window != null)
             {
-                var textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
+                TextBox? textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
                 if (textBox != null)
                 {
                     textBox.Text = input;
@@ -308,7 +302,7 @@ namespace ColorPicker.View.Wpf.Tests
 
                     if (isValid)
                     {
-                        var slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
+                        Slider? slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
                         if (slider != null)
                         {
                             double value = double.Parse(input, NumberStyles.Number, NumberFormatInfo.InvariantInfo);
@@ -317,7 +311,7 @@ namespace ColorPicker.View.Wpf.Tests
                     }
                     else
                     {
-                        var retryResult = Retry.WhileFalse(
+                        RetryResult<bool> retryResult = Retry.WhileFalse(
                             () => textBox.Properties.HelpText.Value == "Error",
                             timeout: TimeSpan.FromMilliseconds(5000)
                         );
@@ -334,16 +328,16 @@ namespace ColorPicker.View.Wpf.Tests
         /// <param name="input">Input value.</param>
         /// <param name="sliderId">Slider identifier</param>
         /// <param name="textBoxId">TextBox identifier.</param>
-        public void RgbSlider_ValidateValue(double input, string sliderId, string textBoxId)
+        public static void RgbSlider_ValidateValue(double input, string sliderId, string textBoxId)
         {
             if (_window != null)
             {
-                var slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
+                Slider? slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
                 if (slider != null)
                 {
                     slider.Value = input;
 
-                    var textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
+                    TextBox? textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
                     if (textBox != null)
                     {
                         double value = double.Parse(textBox.Text, NumberStyles.Number, NumberFormatInfo.InvariantInfo);
@@ -353,20 +347,12 @@ namespace ColorPicker.View.Wpf.Tests
             }
         }
 
-
-
-
-
-
-
-
-
         #endregion
 
         #region Alpha
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void AlphaTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_AlphaTextBox", "PART_AlphaSlider");
@@ -398,7 +384,7 @@ namespace ColorPicker.View.Wpf.Tests
         }
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void SaturationTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_SaturationTextBox", "PART_SaturationSlider");
@@ -412,7 +398,7 @@ namespace ColorPicker.View.Wpf.Tests
         }
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void ValueTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_ValueTextBox", "PART_ValueSlider");
@@ -444,7 +430,7 @@ namespace ColorPicker.View.Wpf.Tests
         }
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void HslSaturationTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_HslSaturationTextBox", "PART_HslSaturationSlider");
@@ -458,7 +444,7 @@ namespace ColorPicker.View.Wpf.Tests
         }
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void LightnessTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_LightnessTextBox", "PART_LightnessSlider");
@@ -476,7 +462,7 @@ namespace ColorPicker.View.Wpf.Tests
         #region CMYK
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void CyanTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_CyanTextBox", "PART_CyanSlider");
@@ -490,7 +476,7 @@ namespace ColorPicker.View.Wpf.Tests
         }
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void MagentaTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_MagentaTextBox", "PART_MagentaSlider");
@@ -504,7 +490,7 @@ namespace ColorPicker.View.Wpf.Tests
         }
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void YellowTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_YellowTextBox", "PART_YellowSlider");
@@ -518,7 +504,7 @@ namespace ColorPicker.View.Wpf.Tests
         }
 
         [DataTestMethod]
-        [DynamicData(nameof(percentagesTextBoxValues), DynamicDataSourceType.Property)]
+        [DynamicData(nameof(PercentagesTextBoxValues), DynamicDataSourceType.Property)]
         public void KeyTextBox_ValidateValue(string input, string output, bool isInputNumber)
         {
             TextBox_ValidateValue(input, output, isInputNumber, "PART_KeyTextBox", "PART_KeySlider");
@@ -541,11 +527,11 @@ namespace ColorPicker.View.Wpf.Tests
         /// <param name="isInputNumber">Information about whether the input value is a number.</param>
         /// <param name="textBoxId">TextBox identifier.</param>
         /// <param name="sliderId">Slider identifier</param>
-        private void TextBox_ValidateValue(string input, string output, bool isInputNumber, string textBoxId, string sliderId)
+        private static void TextBox_ValidateValue(string input, string output, bool isInputNumber, string textBoxId, string sliderId)
         {
             if (_window != null)
             {
-                var textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
+                TextBox? textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
                 if (textBox != null)
                 {
                     textBox.Text = input;
@@ -564,7 +550,7 @@ namespace ColorPicker.View.Wpf.Tests
                         double value = double.Parse(textBox.Text.TrimEnd('°').TrimEnd('%'), NumberStyles.Number, NumberFormatInfo.InvariantInfo);
                         Assert.AreEqual(output, value.ToString(NumberFormatInfo.InvariantInfo));
 
-                        var slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
+                        Slider? slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
                         if (slider != null)
                         {
                             value = double.Parse(output, NumberStyles.Number, NumberFormatInfo.InvariantInfo);
@@ -573,7 +559,7 @@ namespace ColorPicker.View.Wpf.Tests
                     }
                     else
                     {
-                        var retryResult = Retry.WhileFalse(
+                        RetryResult<bool> retryResult = Retry.WhileFalse(
                                 () => textBox.Properties.HelpText.Value == "Error",
                                 timeout: TimeSpan.FromMilliseconds(5000)
                             );
@@ -591,18 +577,18 @@ namespace ColorPicker.View.Wpf.Tests
         /// <param name="output">Output value.</param>
         /// <param name="sliderId">Slider identifier</param>
         /// <param name="textBoxId">TextBox identifier.</param>
-        private void Slider_ValidateValue(double input, string output, string sliderId, string textBoxId)
+        private static void Slider_ValidateValue(double input, string output, string sliderId, string textBoxId)
         {
             if (_window != null)
             {
-                var slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
-                var textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
+                Slider? slider = _window.FindFirstDescendant(cf => cf.ByAutomationId(sliderId))?.AsSlider();
+                TextBox? textBox = _window.FindFirstDescendant(cf => cf.ByAutomationId(textBoxId))?.AsTextBox();
 
                 if (slider != null && textBox != null)
                 {
                     slider.Value = input;
 
-                    var retryResult = Retry.WhileFalse(
+                    RetryResult<bool> retryResult = Retry.WhileFalse(
                             () => textBox.Text == output,
                             timeout: TimeSpan.FromMilliseconds(5000)
                         );
