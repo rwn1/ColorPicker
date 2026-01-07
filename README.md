@@ -666,3 +666,9 @@ These samples show:
 * Practical usage of color UI components
 
 You can explore the sample projects to see ready-to-use implementations and learn how to integrate the libraries into your own *Blazor* applications.
+
+## 🧪 Testing
+`ColorPicker.View.Blazor` implements the *Blazor* user interface for the color picker, including all *PART_** layout elements.
+`ColorPicker.View.Blazor.Tests.bUnit` uses *bUnit* for testing work with the component itself and `ColorPicker.View.Blazor.Tests.Playwright` uses *Playwright* for testing interaction between component parts.
+
+**Note:** UI tests rely on *PART_** names to locate elements, but not all *PART_** elements need to be present. This makes tests flexible and able to cover different templates and partial implementations without modification.
