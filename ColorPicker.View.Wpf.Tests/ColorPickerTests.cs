@@ -11,9 +11,20 @@ namespace ColorPicker.View.Wpf.Tests
     [TestClass]
     public sealed class ColorPickerTests
     {
-        private static Application _application;
-        private static UIA3Automation _automation;
-        private static Window _window;
+        /// <summary>
+        /// Gets the wrapper for an application which should be automated.
+        /// </summary>
+        private static Application _application = default!;
+
+        /// <summary>
+        /// Gets the automation implementation for UIA3.
+        /// </summary>
+        private static UIA3Automation _automation = default!;
+
+        /// <summary>
+        /// Gets the main window of the applications process.
+        /// </summary>
+        private static Window _window = default!;
 
         /// <summary>
         /// Values for testing the percentages TextBox controls.
@@ -72,6 +83,12 @@ namespace ColorPicker.View.Wpf.Tests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
+            if (_application is not null)
+            {
+                _application.Close();
+                _application.Dispose();
+            }
+
             _application = Application.Launch(@"..\..\..\..\ColorPicker.Wpf.App1\bin\Release\net8.0-windows\ColorPicker.Wpf.App1.exe");
             if (_application != null)
             {
@@ -133,8 +150,17 @@ namespace ColorPicker.View.Wpf.Tests
         [ClassCleanup]
         public static void Cleanup()
         {
+            if (_application is not null)
+            {
+                if (!_application.HasExited)
+                {
+                    _application.Close();
+                }
+
+                _application.Dispose();
+            }
+
             _automation.Dispose();
-            _application.Close();
         }
 
         #region Hex
