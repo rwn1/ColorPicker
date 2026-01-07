@@ -72,7 +72,7 @@ namespace ColorPicker.View.Wpf.Tests
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
-            _application = Application.Launch(@"..\ColorPicker.App1\bin\Debug\net8.0-windows\ColorPicker.Wpf.App1.exe");
+            _application = Application.Launch(@"..\..\..\..\ColorPicker.Wpf.App1\bin\Release\net8.0-windows\ColorPicker.Wpf.App1.exe");
             if (_application != null)
             {
                 _automation = new UIA3Automation();
