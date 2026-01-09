@@ -2,7 +2,7 @@
 `ColorPicker.Core` is a universal, multi-platform color-processing library, with UI implementations available for *WPF* (`ColorPicker.View.Wpf`), *.NET MAUI* (`ColorPicker.View.Maui`) and *Blazor* (`ColorPicker.View.Blazor`). Additional UI implementations may be added in the future (a *WinUI* version is currently being planned).
 This implementation solves the issue where each technology uses its own color-related classes.
 
-<img width="721" height="233" alt="image" src="https://github.com/user-attachments/assets/a8656ea9-276d-45f6-b45c-d0b723d96ba7" />
+<img width="721" height="233" src="https://github.com/user-attachments/assets/bf5f8254-2272-4d50-ab76-527ee0ed945c" />
 
 ## 🧪 Testing
 `ColorPicker.Core` contains all the main logic, algorithms, and color conversion routines.
