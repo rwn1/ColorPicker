@@ -3,19 +3,12 @@
 	<PropertyGroup>
 		<TargetFrameworks>
 			net462;
-			net47;
-			net471;
-			net472;
-			net48;
-			net481;
-			net6.0-windows7.0;
-			net7.0-windows7.0;
-			net8.0-windows7.0
+			net8.0-windows
 		</TargetFrameworks>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<PackageId>ColorPicker.View.Wpf</PackageId>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 		<Authors>rwn1</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>ColorPicker.View.Wpf provides a set of reusable WPF controls for color selection and visualization. It leverages ColorPicker.Core for all color logic and conversions, offering ready-to-use UI components such as color pickers, sliders, and color previews for Hex, RGB, HSL, HSV, and CMYK formats.</Description>
